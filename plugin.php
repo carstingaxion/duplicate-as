@@ -121,11 +121,11 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 		 *
 		 * @example
 		 * // Enable both duplication and transformation
-		 * add_post_type_support( 'page', 'duplicate_as', array('page', 'post', 'event') );
+		 * add_post_type_support( 'page', 'duplicate_as', array('page', 'post', 'gatherpress_event') );
 		 */
 		public function add_post_type_support(): void {
-			add_post_type_support( 'post', 'duplicate_as' );
-			add_post_type_support( 'page', 'duplicate_as', array('page', 'post', 'gatherpress_event') );
+			add_post_type_support( 'page', 'duplicate_as' );
+			add_post_type_support( 'post', 'duplicate_as', array('page', 'post') );
 		}
 
 		/**

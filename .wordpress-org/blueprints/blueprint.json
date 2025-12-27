@@ -1,0 +1,46 @@
+{
+  "$schema": "https://playground.wordpress.net/blueprint-schema.json",
+  "landingPage": "/wp-admin/edit.php",
+  "preferredVersions": {
+    "php": "8.2",
+    "wp": "latest"
+  },
+  "features": {
+    "networking": true
+  },
+  "steps": [
+    {
+      "step": "setSiteOptions",
+      "options": {
+        "blogname": "Duplicate as",
+        "blogdescription": "Empowering WordPress with post duplication."
+      }
+    },
+    {
+      "step": "login",
+      "username": "admin"
+    },
+    {
+      "step": "updateUserMeta",
+      "meta": {
+        "admin_color": "modern",
+        "show_welcome_panel": 0
+     },
+      "userId": 1
+    },
+    {
+      "step": "installPlugin",
+      "pluginData": {
+        "resource": "git:directory",
+        "url": "https://github.com/carstingaxion/duplicate-as",
+        "ref": "HEAD"
+      },
+      "options": {
+        "activate": true
+      },
+      "progress": {
+        "caption": "Installing plugin from GitHub: carstingaxion/duplicate-as"
+      }
+    }
+  ]
+}

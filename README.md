@@ -9,6 +9,8 @@
 
 Adds a convenient duplicate option to the block editor’s More Actions menu for quick post and page duplication.
 
+[![Playground Demo Link](https://img.shields.io/badge/WordPress_Playground-blue?logo=wordpress&logoColor=%23fff&labelColor=%233858e9&color=%233858e9)](https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/carstingaxion/duplicate-as/main/.wordpress-org/blueprints/blueprint.json) [![Build, test & measure](https://github.com/carstingaxion/duplicate-as/actions/workflows/build-test-measure.yml/badge.svg?branch=main)](https://github.com/carstingaxion/duplicate-as/actions/workflows/build-test-measure.yml)
+
 ---
 
 ## Description
