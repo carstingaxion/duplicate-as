@@ -136,11 +136,6 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 		 * @since 0.1.0
 		 * @param string $post_type Post type to check.
 		 * @return bool True if duplication is supported, false otherwise.
-		 *
-		 * @example
-		 * if ( $this->is_post_type_allowed( 'post' ) ) {
-		 *     // Post type supports duplication
-		 * }
 		 */
 		public function is_post_type_allowed( string $post_type ): bool {
 			return post_type_supports( $post_type, 'duplicate_as' );
@@ -1016,17 +1011,9 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 		 * Enqueue editor scripts and styles
 		 *
 		 * Loads JavaScript and CSS for the block editor UI.
-		 * Localizes script with REST URL and nonce.
 		 *
 		 * @since 0.1.0
 		 * @return void
-		 *
-		 * @example Localized data structure:
-		 * {
-		 *   "restUrl": "https://example.com/wp-json/duplicate-as/v1",
-		 *   "nonce": "abc123def456",
-		 *   "canEdit": true
-		 * }
 		 */
 		public function enqueue_editor_assets(): void {
 			$asset_file = include plugin_dir_path( __FILE__ ) . 'build/index.asset.php';
@@ -1045,16 +1032,6 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 				array( 'wp-components' ),
 				$asset_file['version']
 			);
-
-			// wp_localize_script(
-			// 	'duplicate-as-editor',
-			// 	'duplicateAsData',
-			// 	array(
-			// 		'restUrl'          => rest_url( self::REST_NAMESPACE ),
-			// 		'nonce'            => wp_create_nonce( 'wp_rest' ),
-			// 		'canEdit'          => current_user_can( 'edit_posts' ),
-			// 	)
-			// );
 		}
 	}
 }

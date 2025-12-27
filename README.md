@@ -18,10 +18,8 @@ The **Duplicate as** plugin enhances your WordPress editing experience by adding
 ### Key Features
 
 - **One-Click Duplication** – Duplicate posts and pages instantly from the More Actions menu  
-- **Easy Access** – Click the three dots (⋮) in the editor header to find the duplicate option  
 - **Complete Content Copy** – Duplicates title, content, blocks, featured image, categories, tags, and custom fields  
 - **Smart Draft Creation** – New duplicates are created as drafts with the same title for easy identification  
-- **Visual Feedback** – Shows processing state during duplication  
 - **Error Handling** – Graceful error messages if something goes wrong  
 - **Permission-Aware** – Only visible to users with appropriate capabilities  
 - **Post Type Support** – Uses WordPress post type supports system for extensibility  
