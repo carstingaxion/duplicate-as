@@ -915,7 +915,11 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 		 */
 		private function copy_post_meta( int $from_post_id, int $to_post_id ): void {
 			$post_meta = get_post_meta( $from_post_id );
-			$excluded_keys = array( '_edit_lock', '_edit_last' );
+			$excluded_keys = array(
+				'_edit_last',
+				'_edit_lock',
+				'_thumbnail_id',
+			);
 			
 			/**
 			 * Filters the list of meta keys to exclude from duplication
