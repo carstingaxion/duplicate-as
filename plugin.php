@@ -229,7 +229,7 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 
 			// Check permissions.
 			$post_type_obj = get_post_type_object( $post->post_type );
-			if ( ! current_user_can( $post_type_obj->cap->edit_post, $post->ID ) ) {
+			if ( ! $post_type_obj || ! current_user_can( $post_type_obj->cap->edit_post, $post->ID ) ) {
 				return $actions;
 			}
 
@@ -272,6 +272,11 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 					}
 					
 					// Check permission for target post type.
+					/** 
+					 * Sure types coming from get_post_type_object()
+					 * 
+					 * @var WP_Post_Type $target_post_type_obj
+					 */
 					if ( ! current_user_can( $target_post_type_obj->cap->create_posts ) ) {
 						continue;
 					}
@@ -934,7 +939,7 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 		 * ]
 		 */
 		private function copy_post_meta( int $from_post_id, int $to_post_id ): void {
-			$post_meta     = get_post_meta( $from_post_id );
+			$post_meta     = (array) get_post_meta( $from_post_id );
 			$excluded_keys = array(
 				'_edit_last',
 				'_edit_lock',
@@ -960,7 +965,7 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 			$excluded_keys = apply_filters( 'duplicate_as_excluded_meta_keys', $excluded_keys, $from_post_id, $to_post_id );
 
 			foreach ( $post_meta as $meta_key => $meta_values ) {
-				if ( in_array( $meta_key, $excluded_keys, true ) ) {
+				if ( ! is_string( $meta_key ) || in_array( $meta_key, $excluded_keys, true ) || ! is_array( $meta_values ) ) {
 					continue;
 				}
 	
@@ -1041,6 +1046,11 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 		 * @return void
 		 */
 		public function enqueue_editor_assets(): void {
+			/** 
+			 * Sure types coming from the wp-scripts package
+			 * 
+			 * @var array{version:string, dependencies:array<string>} $asset_file
+			 */
 			$asset_file = include plugin_dir_path( __FILE__ ) . 'build/index.asset.php';
 
 			wp_enqueue_script(
@@ -1068,10 +1078,10 @@ if ( ! function_exists( 'duplicate_as_init' ) ) {
 	 * Returns the singleton instance of the plugin class.
 	 *
 	 * @since 0.1.0
-	 * @return Duplicate_As The singleton instance.
+	 * @return void
 	 */
-	function duplicate_as_init(): Duplicate_As {
-		return Duplicate_As::get_instance();
+	function duplicate_as_init(): void {
+		Duplicate_As::get_instance();
 	}
 	add_action( 'plugins_loaded', 'duplicate_as_init' );
 }

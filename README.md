@@ -40,14 +40,25 @@ The **Duplicate as** plugin enhances your WordPress editing experience by adding
 
 The plugin works with posts and pages by default and can be extended to support custom post types through the post type supports system.
 
----
 
-## Installation
+#### Example 1: Duplicate pages *(supported by default)*
 
-1. Upload the plugin files to the `/wp-content/plugins/duplicate-as` directory, ~~or install the plugin through the WordPress Plugins screen~~  
-2. Activate the plugin through the **Plugins** screen in WordPress  
-3. Open any post or page in the block editor  
-4. Click the More Actions menu (⋮) to see the duplicate option  
+```php
+add_post_type_support( 'page', 'duplicate_as' );
+```
+
+| ![](assets/screenshot-1.png) | ![](assets/screenshot-2.png)  |
+| --- | --- |
+
+#### Example 2: Duplicate and "Duplicate as" for posts *(supported by default)*
+
+```php
+add_post_type_support( 'post', 'duplicate_as', array('page', 'post') );
+```
+
+| ![](assets/screenshot-3.png) | ![](assets/screenshot-4.png)  |
+| --- | --- |
+
 
 ---
 
@@ -105,47 +116,48 @@ Yes. Since it duplicates the raw content and all blocks, it works with any block
 
 Yes. The plugin provides several filter hooks:
 
+- `duplicate_as_button_post_data` – Filter post data
+- `duplicate_as_button_taxonomies` – Filter taxonomies to copy
+- `duplicate_as_button_taxonomy_terms` – Filter terms for a specific taxonomy
+- `duplicate_as_button_excluded_meta_keys` – Filter excluded meta keys
+- `duplicate_as_button_meta_value` – Filter individual meta values
+- `duplicate_as_button_featured_image` – Filter featured image ID
 
-`duplicate_as_button_post_data` – Filter post data
-
-`duplicate_as_button_taxonomies` – Filter taxonomies to copy
-
-`duplicate_as_button_taxonomy_terms` – Filter terms for a specific taxonomy
-
-`duplicate_as_button_excluded_meta_keys` – Filter excluded meta keys
-
-`duplicate_as_button_meta_value` – Filter individual meta values
-
-`duplicate_as_button_featured_image` – Filter featured image ID
+---
 
 ## Screenshots
 
-The duplicate option appears in the More Actions menu (⋮) in the editor header
+1. The duplicate option appears in the More Actions menu (⋮) in the editor header
+2. Processing state shows while the post is being duplicated
+3. Success redirect to the newly created draft
 
-Processing state shows while the post is being duplicated
+---
 
-Success redirect to the newly created draft
+## Installation
+
+1. Upload the plugin files to the `/wp-content/plugins/duplicate-as` directory, ~~or install the plugin through the WordPress Plugins screen~~  
+2. Activate the plugin through the **Plugins** screen in WordPress  
+3. Open any post or page in the block editor  
+4. Click the More Actions menu (⋮) to see the duplicate option  
+
+---
 
 ## Changelog
-0.1.0
+
+### 0.1.0
 
 Initial release
 
-Duplicate option in More Actions menu
+- Duplicate option in More Actions menu
+- Complete content and metadata duplication
+- Post type supports system integration
+- Transform functionality for different post types
+- Multiple filter hooks for customization
+- Loading states and error handling
+- Permission checks
+- Accessible interface
 
-Complete content and metadata duplication
-
-Post type supports system integration
-
-Transform functionality for different post types
-
-Multiple filter hooks for customization
-
-Loading states and error handling
-
-Permission checks
-
-Accessible interface
+---
 
 # Developer Notes
 
