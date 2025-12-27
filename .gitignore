@@ -1,4 +1,4 @@
-/build/
+# /build/
 /node_modules
 /vendor
 *.sql
@@ -8,7 +8,7 @@
 .vscode
 
 # Generated via bin/transform-readme.php
-/readme.txt
+# /readme.txt
 /.wp-env.override.json
 
 # misc

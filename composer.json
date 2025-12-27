@@ -1,18 +1,13 @@
 {
-    "name": "figuren-theater/duplicate-as",
+    "name": "carstingaxion/duplicate-as",
     "description": "... like the figuren.theater WordPress Multisite network.",
     "license": "GPL-3.0+",
-    "type": "wordpress-muplugin",
+    "type": "wordpress-plugin",
     "keywords": [
         "wordpress",
-        "wordpress-plugin",
-        "wordpress-muplugin"
+        "wordpress-plugin"
     ],
     "authors": [
-        {
-            "name": "figuren.theater",
-            "email": "info@figuren.theater"
-        },
         {
             "name": "Carsten Bach",
             "email": "mail@carsten-bach.de",
@@ -23,8 +18,8 @@
     "homepage": "https://websites.fuer.figuren.theater",
     "support": {
         "email": "info@figuren.theater",
-        "issues": "https://github.com/figuren-theater/duplicate-as/issues",
-        "source": "https://github.com/figuren-theater/duplicate-as"
+        "issues": "https://github.com/carstingaxion/duplicate-as/issues",
+        "source": "https://github.com/carstingaxion/duplicate-as"
     },
     "require-dev": {
         "figuren-theater/code-quality": "*"
@@ -35,14 +30,6 @@
             "url": "https://wpackagist.org"
         }
     ],
-    "autoload": {
-        "classmap": [
-            "inc/"
-        ],
-        "files": [
-            "inc/namespace.php"
-        ]
-    },
     "config": {
         "allow-plugins": {
             "composer/installers": true,
