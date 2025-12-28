@@ -7,34 +7,19 @@
 **License:** GPLv2 or later  
 **License URI:** https://www.gnu.org/licenses/gpl-2.0.html  
 
-Adds a convenient duplicate option to the block editor’s More Actions menu for quick post and page duplication.
-
 [![Playground Demo Link](https://img.shields.io/badge/WordPress_Playground-blue?logo=wordpress&logoColor=%23fff&labelColor=%233858e9&color=%233858e9)](https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/carstingaxion/duplicate-as/main/.wordpress-org/blueprints/blueprint.json) [![Build, test & measure](https://github.com/carstingaxion/duplicate-as/actions/workflows/build-test-measure.yml/badge.svg?branch=main)](https://github.com/carstingaxion/duplicate-as/actions/workflows/build-test-measure.yml)
 
 ---
 
 ## Description
 
-The **Duplicate as** plugin enhances your WordPress editing experience by adding a duplicate option to the block editor’s **More Actions** menu (⋮). This feature allows you to quickly create copies of posts and pages without leaving the editor.
-
-### Key Features
-
-- **One-Click Duplication** – Duplicate posts and pages instantly from the More Actions menu  
-- **Complete Content Copy** – Duplicates title, content, blocks, featured image, categories, tags, and custom fields  
-- **Smart Draft Creation** – New duplicates are created as drafts with the same title for easy identification  
-- **Error Handling** – Graceful error messages if something goes wrong  
-- **Permission-Aware** – Only visible to users with appropriate capabilities  
-- **Post Type Support** – Uses WordPress post type supports system for extensibility  
-- **Transform Support** – Can transform posts to different post types when configured  
-- **Developer Friendly** – Multiple filter hooks for customization  
-- **Accessible** – Proper ARIA labels and WordPress admin integration  
-- **Native Integration** – Uses standard WordPress UI patterns  
+Duplicate or *Duplicate as* different post type, directly from the Editor Sidebar or the Admin List Tables.
 
 ### How It Works
 
 1. Open any post or page in the block editor  
-2. Click the More Actions menu (⋮) in the top-right corner  
-3. Click **Duplicate** to create a copy  
+2. Open the Editor Sidebar  
+3. Click **Duplicate** or **Duplicate as (...)** to create a copy  
 4. The plugin will copy all content and metadata  
 5. You’ll be automatically redirected to edit the new draft  
 
@@ -66,7 +51,7 @@ add_post_type_support( 'post', 'duplicate_as', array('page', 'post') );
 
 ### Where is the duplicate button?
 
-Click the three dots (⋮) menu in the top-right corner of the block editor. The **Duplicate** option will appear in that menu.
+Duplicate or *Duplicate as* different post type, directly from the Editor Sidebar or the Admin List Tables
 
 ### Who can see and use the duplicate button?
 
@@ -148,14 +133,16 @@ Yes. The plugin provides several filter hooks:
 
 Initial release
 
-- Duplicate option in More Actions menu
-- Complete content and metadata duplication
-- Post type supports system integration
-- Transform functionality for different post types
-- Multiple filter hooks for customization
-- Loading states and error handling
-- Permission checks
-- Accessible interface
+- Works on every post type, because its build based on post type supports
+- Duplicate posts and pages instantly from the Editor Sidebar or the Admin List Tables
+- Complete duplication post-data, taxonomy terms and postmeta-data (incl. featured image)
+- Can transform posts to different post types when configured  
+- New duplicates are created as drafts
+- Loading states and graceful error messages if something goes wrong  
+- Only visible to users with appropriate capabilities  
+- Proper ARIA labels and WordPress admin integration  
+- Multiple filter and action hooks for customization
+
 
 ---
 
