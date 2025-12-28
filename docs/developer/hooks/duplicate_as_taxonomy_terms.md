@@ -5,13 +5,15 @@ Filters the terms to copy for a specific taxonomy
 
 ## Example
 
+```php
 add_filter( 'duplicate_as_taxonomy_terms', function( $terms, $taxonomy, $from_id, $to_id ) {
-if ( $taxonomy === 'category' ) {
-// Only copy the first category
-return array_slice( $terms, 0, 1 );
-}
-return $terms;
+    if ( $taxonomy === 'category' ) {
+        // Only copy the first category
+        return array_slice( $terms, 0, 1 );
+    }
+    return $terms;
 }, 10, 4 );
+```
 
 ## Parameters
 
@@ -22,7 +24,7 @@ return $terms;
 
 ## Files
 
-- [plugin.php:1082](https://github.com/carstingaxion/duplicate-as/blob/main/plugin.php#L1082)
+- [plugin.php:1088](https://github.com/carstingaxion/duplicate-as/blob/main/plugin.php#L1088)
 ```php
 apply_filters( 'duplicate_as_taxonomy_terms', $terms, $taxonomy, $from_post_id, $to_post_id )
 ```

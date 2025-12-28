@@ -5,11 +5,13 @@ Filters the list of meta keys to exclude from duplication
 
 ## Example
 
+```php
 add_filter( 'duplicate_as_excluded_meta_keys', function( $excluded_keys, $from_id, $to_id ) {
-// Exclude view count from duplication
-$excluded_keys[] = '_view_count';
-return $excluded_keys;
+    // Exclude view count from duplication
+    $excluded_keys[] = '_view_count';
+    return $excluded_keys;
 }, 10, 3 );
+```
 
 ## Parameters
 
@@ -19,7 +21,7 @@ return $excluded_keys;
 
 ## Files
 
-- [plugin.php:1132](https://github.com/carstingaxion/duplicate-as/blob/main/plugin.php#L1132)
+- [plugin.php:1140](https://github.com/carstingaxion/duplicate-as/blob/main/plugin.php#L1140)
 ```php
 apply_filters( 'duplicate_as_excluded_meta_keys', $excluded_keys, $from_post_id, $to_post_id )
 ```

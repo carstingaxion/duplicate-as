@@ -5,13 +5,15 @@ Filters the meta value before adding it to the duplicate post
 
 ## Example
 
+```php
 add_filter( 'duplicate_as_meta_value', function( $value, $key, $from_id, $to_id ) {
-if ( $key === '_custom_counter' ) {
-// Reset counter to 0 for duplicate
-return 0;
-}
-return $value;
+    if ( $key === '_custom_counter' ) {
+        // Reset counter to 0 for duplicate
+        return 0;
+    }
+    return $value;
 }, 10, 4 );
+```
 
 ## Parameters
 
@@ -22,7 +24,7 @@ return $value;
 
 ## Files
 
-- [plugin.php:1164](https://github.com/carstingaxion/duplicate-as/blob/main/plugin.php#L1164)
+- [plugin.php:1174](https://github.com/carstingaxion/duplicate-as/blob/main/plugin.php#L1174)
 ```php
 apply_filters( 'duplicate_as_meta_value', $meta_value, $meta_key, $from_post_id, $to_post_id )
 ```
