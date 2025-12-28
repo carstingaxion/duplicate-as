@@ -977,11 +977,13 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 			 * @param string|null $target_post_type  Target post type if transforming.
 			 *
 			 * @example
+			 * ```php
 			 * add_filter( 'duplicate_as_post_data', function( $post_data, $original_post, $target_post_type ) {
 			 *     // Add prefix to title
 			 *     $post_data['post_title'] = 'Copy of ' . $post_data['post_title'];
 			 *     return $post_data;
 			 * }, 10, 3 );
+			 * ```
 			 */
 			$new_post_data = apply_filters( 'duplicate_as_post_data', $new_post_data, $post, $target_post_type );
 			/** Assume this is still valid, after filtering ;)
@@ -1041,10 +1043,12 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 			 * @param string $target_post_type The target post type.
 			 *
 			 * @example
+			 * ```php
 			 * add_filter( 'duplicate_as_taxonomies', function( $taxonomies, $from_id, $to_id, $source, $target ) {
 			 *     // Remove category from duplication
 			 *     return array_diff( $taxonomies, ['category'] );
 			 * }, 10, 5 );
+			 * ```
 			 */
 			$taxonomies = apply_filters( 'duplicate_as_taxonomies', $taxonomies, $from_post_id, $to_post_id, $source_post_type, $target_post_type );
 			
@@ -1071,6 +1075,7 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 				 * @param int    $to_post_id   The duplicate post ID.
 				 *
 				 * @example
+				 * ```php
 				 * add_filter( 'duplicate_as_taxonomy_terms', function( $terms, $taxonomy, $from_id, $to_id ) {
 				 *     if ( $taxonomy === 'category' ) {
 				 *         // Only copy the first category
@@ -1078,6 +1083,7 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 				 *     }
 				 *     return $terms;
 				 * }, 10, 4 );
+				 * ```
 				 */
 				$terms = apply_filters( 'duplicate_as_taxonomy_terms', $terms, $taxonomy, $from_post_id, $to_post_id );
 				
@@ -1123,11 +1129,13 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 			 * @param int   $to_post_id    The duplicate post ID.
 			 *
 			 * @example
+			 * ```php
 			 * add_filter( 'duplicate_as_excluded_meta_keys', function( $excluded_keys, $from_id, $to_id ) {
 			 *     // Exclude view count from duplication
 			 *     $excluded_keys[] = '_view_count';
 			 *     return $excluded_keys;
 			 * }, 10, 3 );
+			 * ```
 			 */
 			$excluded_keys = apply_filters( 'duplicate_as_excluded_meta_keys', $excluded_keys, $from_post_id, $to_post_id );
 
@@ -1153,6 +1161,7 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 					 * @param int    $to_post_id   The duplicate post ID.
 					 *
 					 * @example
+					 * ```php
 					 * add_filter( 'duplicate_as_meta_value', function( $value, $key, $from_id, $to_id ) {
 					 *     if ( $key === '_custom_counter' ) {
 					 *         // Reset counter to 0 for duplicate
@@ -1160,6 +1169,7 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 					 *     }
 					 *     return $value;
 					 * }, 10, 4 );
+					 * ```
 					 */
 					$meta_value = apply_filters( 'duplicate_as_meta_value', $meta_value, $meta_key, $from_post_id, $to_post_id );
 					
@@ -1195,10 +1205,12 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 			 * @param int       $to_post_id   The duplicate post ID.
 			 *
 			 * @example
+			 * ```php
 			 * add_filter( 'duplicate_as_featured_image', function( $thumbnail_id, $from_id, $to_id ) {
 			 *     // Don't copy featured image
 			 *     return false;
 			 * }, 10, 3 );
+			 * ```
 			 */
 			$thumbnail_id = apply_filters( 'duplicate_as_featured_image', $thumbnail_id, $from_post_id, $to_post_id );
 			
