@@ -3,14 +3,14 @@
  */
 
 .duplicate-as-status-info {
-    flex-direction: column;
-  
+	flex-direction: column;
+
 	.duplicate-as-button {
 		width: 100%;
 		justify-content: center;
 		margin-bottom: 8px;
 		display: flex;
-		
+
 		&:last-child {
 			margin-bottom: 0;
 		}

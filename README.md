@@ -116,12 +116,12 @@ Yes. Since it duplicates the raw content and all blocks, it works with any block
 
 Yes. The plugin provides several filter hooks:
 
-- `duplicate_as_button_post_data` – Filter post data
-- `duplicate_as_button_taxonomies` – Filter taxonomies to copy
-- `duplicate_as_button_taxonomy_terms` – Filter terms for a specific taxonomy
-- `duplicate_as_button_excluded_meta_keys` – Filter excluded meta keys
-- `duplicate_as_button_meta_value` – Filter individual meta values
-- `duplicate_as_button_featured_image` – Filter featured image ID
+- `duplicate_as_post_data` – Filter post data
+- `duplicate_as_taxonomies` – Filter taxonomies to copy
+- `duplicate_as_taxonomy_terms` – Filter terms for a specific taxonomy
+- `duplicate_as_excluded_meta_keys` – Filter excluded meta keys
+- `duplicate_as_meta_value` – Filter individual meta values
+- `duplicate_as_featured_image` – Filter featured image ID
 
 ---
 
@@ -178,7 +178,7 @@ add_post_type_support( 'page', 'duplicate_as', 'post' );
 
 ```php
 add_filter(
-    'duplicate_as_button_post_data',
+    'duplicate_as_post_data',
     function ( $post_data, $original_post, $target_post_type ) {
         $post_data['post_title'] = 'Copy of ' . $post_data['post_title'];
         return $post_data;
@@ -191,12 +191,8 @@ add_filter(
 ## Excluding Meta Keys
 
 ```php
-add_filter( 'duplicate_as_button_excluded_meta_keys', function ( $excluded_keys ) {
+add_filter( 'duplicate_as_excluded_meta_keys', function ( $excluded_keys ) {
     $excluded_keys[] = 'my_custom_meta_key';
     return $excluded_keys;
 } );
 ```
-
-## Technical Details
-
-The plugin uses the WordPress REST API to handle duplication on the server side, ensuring all data is properly copied and permissions are respected. The menu item is implemented using the PluginMoreMenuItem component, which integrates seamlessly with the block editor’s native More Actions menu (⋮) in the editor header.
