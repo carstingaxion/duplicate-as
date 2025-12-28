@@ -356,6 +356,134 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 		}
 
 		/**
+		 * Check if row actions should be added for post
+		 *
+		 * Validates post type and user permissions.
+		 *
+		 * @since 0.1.0
+		 * @param WP_Post $post Current post object.
+		 * @return bool True if actions should be added.
+		 */
+		private function should_add_row_actions( WP_Post $post ): bool {
+			$post_type_obj = get_post_type_object( $post->post_type );
+			if ( ! $post_type_obj || ! is_string( $post_type_obj->cap->edit_post ) ) {
+				return false;
+			}
+
+			if ( ! $this->is_post_type_allowed( $post->post_type ) ) {
+				return false;
+			}
+
+			if ( ! current_user_can( $post_type_obj->cap->edit_post, $post->ID ) ) {
+				return false;
+			}
+
+			return true;
+		}
+
+		/**
+		 * Add duplicate action link to row actions
+		 *
+		 * Creates the duplicate link when appropriate.
+		 *
+		 * @since 0.1.0
+		 * @param array<string, string> $actions Current action links.
+		 * @param WP_Post               $post    Current post object.
+		 * @param array<string>         $targets Transform targets.
+		 * @return array<string, string> Modified action links.
+		 */
+		private function add_duplicate_action( array $actions, WP_Post $post, array $targets ): array {
+			if ( empty( $targets ) || in_array( $post->post_type, $targets, true ) ) {
+				$duplicate_url = wp_nonce_url(
+					admin_url( 'admin.php?action=duplicate_as_duplicate&post=' . $post->ID ),
+					'duplicate_as_duplicate_' . $post->ID
+				);
+
+				$actions['duplicate_as_duplicate'] = sprintf(
+					'<a href="%s" aria-label="%s">%s</a>',
+					esc_url( $duplicate_url ),
+					esc_attr(
+						sprintf( 
+							/* translators: Duplicate {post_title} */
+							__( 'Duplicate "%s"', 'duplicate-as' ),
+							$post->post_title
+						)
+					),
+					esc_html__( 'Duplicate', 'duplicate-as' )
+				);
+			}
+			return $actions;
+		}
+
+		/**
+		 * Add transform action links to row actions
+		 *
+		 * Creates transform links for each valid target post type.
+		 *
+		 * @since 0.1.0
+		 * @param array<string, string> $actions Current action links.
+		 * @param WP_Post               $post    Current post object.
+		 * @param array<string>         $targets Transform targets.
+		 * @return array<string, string> Modified action links.
+		 */
+		private function add_transform_actions( array $actions, WP_Post $post, array $targets ): array {
+			if ( empty( $targets ) ) {
+				return $actions;
+			}
+
+			foreach ( $targets as $target ) {
+				if ( $target === $post->post_type ) {
+					continue;
+				}
+
+				$target_post_type_obj = get_post_type_object( $target );
+				if ( ! $target_post_type_obj || ! is_string( $target_post_type_obj->cap->create_posts ) || ! is_string( $target_post_type_obj->labels->singular_name ) ) {
+					continue;
+				}
+				
+				if ( ! current_user_can( $target_post_type_obj->cap->create_posts ) ) {
+					continue;
+				}
+
+				$transform_url = wp_nonce_url(
+					admin_url(
+						sprintf(
+							'admin.php?action=duplicate_as_transform&post=%d&target_type=%s',
+							$post->ID,
+							rawurlencode( $target )
+						) 
+					),
+					'duplicate_as_transform_' . $post->ID . '_' . $target
+				);
+
+				$target_label = $target_post_type_obj->labels->singular_name;
+				$action_key   = 'duplicate_as_transform_' . $target;
+
+				$actions[ $action_key ] = sprintf(
+					'<a href="%s" aria-label="%s">%s</a>',
+					esc_url( $transform_url ),
+					esc_attr(
+						sprintf(
+							/* translators: Duplicate {post_title} into {target post_type singular label}*/
+							__( 'Duplicate "%1$s" into %2$s', 'duplicate-as' ),
+							$post->post_title,
+							$target_label
+						)
+					),
+					esc_html(
+						sprintf(
+							/* translators: Duplicate as {target post_type singular label} */
+							__( 'Duplicate as %s', 'duplicate-as' ),
+							$target_label
+						)
+					)
+				);
+			}
+
+			return $actions;
+		}
+
+		/**
 		 * Add action links to post list table
 		 *
 		 * Adds "Duplicate" and "Duplicate as {Type}" links to the post row actions.
@@ -388,101 +516,13 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 		 * ]
 		 */
 		public function add_row_actions( array $actions, WP_Post $post ): array {
-			
-			// Check if post type exists.
-			$post_type_obj = get_post_type_object( $post->post_type );
-			if ( ! $post_type_obj || ! is_string( $post_type_obj->cap->edit_post ) ) {
+			if ( ! $this->should_add_row_actions( $post ) ) {
 				return $actions;
 			}
 
-			// Check if post type supports duplication.
-			if ( ! $this->is_post_type_allowed( $post->post_type ) ) {
-				return $actions;
-			}
-
-			// Check user permissions.
-			if ( ! current_user_can( $post_type_obj->cap->edit_post, $post->ID ) ) {
-				return $actions;
-			}
-
-			// Get transform targets.
 			$targets = $this->get_transform_targets( $post->post_type );
-
-			// Add duplicate link if no targets or current post type is in targets.
-			if ( empty( $targets ) || in_array( $post->post_type, $targets, true ) ) {
-				$duplicate_url = wp_nonce_url(
-					admin_url( 'admin.php?action=duplicate_as_duplicate&post=' . $post->ID ),
-					'duplicate_as_duplicate_' . $post->ID
-				);
-
-				$actions['duplicate_as_duplicate'] = sprintf(
-					'<a href="%s" aria-label="%s">%s</a>',
-					esc_url( $duplicate_url ),
-					esc_attr(
-						sprintf( 
-							/* translators: Duplicate {post_title} */
-							__( 'Duplicate "%s"', 'duplicate-as' ),
-							$post->post_title
-						)
-					),
-					esc_html__( 'Duplicate', 'duplicate-as' )
-				);
-			}
-
-			// Add transform links for each target post type.
-			if ( ! empty( $targets ) ) {
-				foreach ( $targets as $target ) {
-					// Skip if target is same as current post type (already handled as duplicate).
-					if ( $target === $post->post_type ) {
-						continue;
-					}
-
-					// Check if target post type exists.
-					$target_post_type_obj = get_post_type_object( $target );
-					if ( ! $target_post_type_obj || ! is_string( $target_post_type_obj->cap->create_posts ) || ! is_string( $target_post_type_obj->labels->singular_name ) ) {
-						continue;
-					}
-					
-					// Check user permission.
-					if ( ! current_user_can( $target_post_type_obj->cap->create_posts ) ) {
-						continue;
-					}
-
-					$transform_url = wp_nonce_url(
-						admin_url(
-							sprintf(
-								'admin.php?action=duplicate_as_transform&post=%d&target_type=%s',
-								$post->ID,
-								rawurlencode( $target )
-							) 
-						),
-						'duplicate_as_transform_' . $post->ID . '_' . $target
-					);
-
-					$target_label = $target_post_type_obj->labels->singular_name;
-					$action_key   = 'duplicate_as_transform_' . $target;
-
-					$actions[ $action_key ] = sprintf(
-						'<a href="%s" aria-label="%s">%s</a>',
-						esc_url( $transform_url ),
-						esc_attr(
-							sprintf(
-								/* translators: Duplicate {post_title} into {target post_type singular label}*/
-								__( 'Duplicate "%1$s" into %2$s', 'duplicate-as' ),
-								$post->post_title,
-								$target_label
-							)
-						),
-						esc_html(
-							sprintf(
-								/* translators: Duplicate as {target post_type singular label} */
-								__( 'Duplicate as %s', 'duplicate-as' ),
-								$target_label
-							)
-						)
-					);
-				}
-			}
+			$actions = $this->add_duplicate_action( $actions, $post, $targets );
+			$actions = $this->add_transform_actions( $actions, $post, $targets );
 
 			return $actions;
 		}
