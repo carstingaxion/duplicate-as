@@ -1,5 +1,5 @@
 {
-	"namespace": "carstingaxion",
+	"namespace": "",
 	"base_dir": ".",
 	"wiki_directory": "docs/developer/hooks",
 	"github_blob_url": "https://github.com/carstingaxion/duplicate-as/blob/main/",
@@ -7,8 +7,6 @@
 		"vendor",
 		"test"
 	],
-	"ignore_filter": [
-		"determine_current_user"
-	],
+	"ignore_filter": [],
 	"top_headline": true
 }
