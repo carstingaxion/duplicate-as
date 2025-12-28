@@ -207,6 +207,87 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 		}
 
 		/**
+		 * Validate source post type and capabilities
+		 *
+		 * Checks if the source post type exists and has required capabilities.
+		 *
+		 * @since 0.1.0
+		 * @param WP_Post $post Post object to validate.
+		 * @return void Dies with error message if validation fails.
+		 */
+		private function validate_source_post_type( WP_Post $post ): void {
+			$post_type_obj = get_post_type_object( $post->post_type );
+			if ( ! $post_type_obj || ! is_string( $post_type_obj->cap->edit_post ) || ! is_string( $post_type_obj->cap->create_posts ) ) {
+				wp_die( esc_html__( 'Post type not found for duplication.', 'duplicate-as' ) );
+			}
+		}
+
+		/**
+		 * Validate duplication support for post type
+		 *
+		 * Checks if the post type supports the duplicate_as feature.
+		 *
+		 * @since 0.1.0
+		 * @param WP_Post $post Post object to validate.
+		 * @return void Dies with error message if validation fails.
+		 */
+		private function validate_duplication_support( WP_Post $post ): void {
+			if ( ! $this->is_post_type_allowed( $post->post_type ) ) {
+				wp_die( esc_html__( 'This post type cannot be duplicated.', 'duplicate-as' ) );
+			}
+		}
+
+		/**
+		 * Validate user permissions for source post
+		 *
+		 * Checks if user can edit the source post and create new posts.
+		 *
+		 * @since 0.1.0
+		 * @param WP_Post $post Post object to validate.
+		 * @return void Dies with error message if validation fails.
+		 */
+		private function validate_source_permissions( WP_Post $post ): void {
+			$post_type_obj = get_post_type_object( $post->post_type );
+			if ( ! $post_type_obj || ! is_string( $post_type_obj->cap->edit_post ) || ! is_string( $post_type_obj->cap->create_posts ) ) {
+				return;
+			}
+
+			if ( ! current_user_can( $post_type_obj->cap->edit_post, $post->ID ) ) {
+				wp_die( esc_html__( 'You do not have permission to duplicate this post.', 'duplicate-as' ) );
+			}
+
+			if ( ! current_user_can( $post_type_obj->cap->create_posts ) ) {
+				wp_die( esc_html__( 'You do not have permission to duplicate this post.', 'duplicate-as' ) );
+			}
+		}
+
+		/**
+		 * Validate target post type and transformation permissions
+		 *
+		 * Checks if transformation to target post type is allowed and user has permissions.
+		 *
+		 * @since 0.1.0
+		 * @param WP_Post $post        Post object to validate.
+		 * @param string  $target_type Target post type slug.
+		 * @return void Dies with error message if validation fails.
+		 */
+		private function validate_transformation( WP_Post $post, string $target_type ): void {
+			$target_post_type_obj = get_post_type_object( $target_type );
+			if ( ! $target_post_type_obj || ! is_string( $target_post_type_obj->cap->create_posts ) ) {
+				wp_die( esc_html__( 'Target post type does not exist.', 'duplicate-as' ) );
+			}
+			
+			if ( ! current_user_can( $target_post_type_obj->cap->create_posts ) ) {
+				wp_die( esc_html__( 'You do not have permission to create posts of the target type.', 'duplicate-as' ) );
+			}
+
+			$allowed_targets = $this->get_transform_targets( $post->post_type );
+			if ( ! in_array( $target_type, $allowed_targets, true ) ) {
+				wp_die( esc_html__( 'This transformation is not allowed.', 'duplicate-as' ) );
+			}
+		}
+
+		/**
 		 * Validate post and permissions for duplication
 		 *
 		 * Common validation logic used by both duplicate and transform handlers.
@@ -225,41 +306,12 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 				wp_die( esc_html__( 'Post not found.', 'duplicate-as' ) );
 			}
 
-			// Check if source post type exists and has required capabilities.
-			$post_type_obj = get_post_type_object( $post->post_type );
-			if ( ! $post_type_obj || ! is_string( $post_type_obj->cap->edit_post ) || ! is_string( $post_type_obj->cap->create_posts ) ) {
-				wp_die( esc_html__( 'Post type not found for duplication.', 'duplicate-as' ) );
-			}
+			$this->validate_source_post_type( $post );
+			$this->validate_duplication_support( $post );
+			$this->validate_source_permissions( $post );
 
-			// Check if post type supports duplication.
-			if ( ! $this->is_post_type_allowed( $post->post_type ) ) {
-				wp_die( esc_html__( 'This post type cannot be duplicated.', 'duplicate-as' ) );
-			}
-
-			// Check user permissions for source post.
-			if ( ! current_user_can( $post_type_obj->cap->edit_post, $post_id ) ) {
-				wp_die( esc_html__( 'You do not have permission to duplicate this post.', 'duplicate-as' ) );
-			}
-
-			// If target type specified, validate it and check permissions.
 			if ( $target_type ) {
-				$target_post_type_obj = get_post_type_object( $target_type );
-				if ( ! $target_post_type_obj || ! is_string( $target_post_type_obj->cap->create_posts ) ) {
-					wp_die( esc_html__( 'Target post type does not exist.', 'duplicate-as' ) );
-				}
-				
-				if ( ! current_user_can( $target_post_type_obj->cap->create_posts ) ) {
-					wp_die( esc_html__( 'You do not have permission to create posts of the target type.', 'duplicate-as' ) );
-				}
-
-				// Check if transformation is allowed.
-				$allowed_targets = $this->get_transform_targets( $post->post_type );
-				if ( ! in_array( $target_type, $allowed_targets, true ) ) {
-					wp_die( esc_html__( 'This transformation is not allowed.', 'duplicate-as' ) );
-				}
-				// Check user permissions for creating posts of source type.
-			} elseif ( ! is_string( $post_type_obj->cap->create_posts ) || ! current_user_can( $post_type_obj->cap->create_posts ) ) {
-				wp_die( esc_html__( 'You do not have permission to duplicate this post.', 'duplicate-as' ) );
+				$this->validate_transformation( $post, $target_type );
 			}
 
 			return $post;
