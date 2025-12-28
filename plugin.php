@@ -125,7 +125,7 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 		 */
 		public function add_post_type_support(): void {
 			add_post_type_support( 'page', 'duplicate_as' );
-			add_post_type_support( 'post', 'duplicate_as', array( 'page', 'post' ) );
+			add_post_type_support( 'post', 'duplicate_as', array( 'page', 'post', 'gatherpress_event' ) );
 		}
 
 		/**
@@ -203,7 +203,7 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 			if ( ! $nonce_value ) {
 				return false;
 			}
-			return wp_verify_nonce( $nonce_value, $action );
+			return (bool) wp_verify_nonce( $nonce_value, $action );
 		}
 
 		/**
@@ -227,7 +227,7 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 
 			// Check if source post type exists and has required capabilities.
 			$post_type_obj = get_post_type_object( $post->post_type );
-			if ( ! $post_type_obj || ! is_string( $post_type_obj->cap->edit_post ) ) {
+			if ( ! $post_type_obj || ! is_string( $post_type_obj->cap->edit_post ) || ! is_string( $post_type_obj->cap->create_posts ) ) {
 				wp_die( esc_html__( 'Post type not found for duplication.', 'duplicate-as' ) );
 			}
 
@@ -257,11 +257,9 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 				if ( ! in_array( $target_type, $allowed_targets, true ) ) {
 					wp_die( esc_html__( 'This transformation is not allowed.', 'duplicate-as' ) );
 				}
-			} else {
 				// Check user permissions for creating posts of source type.
-				if ( ! is_string( $post_type_obj->cap->create_posts ) || ! current_user_can( $post_type_obj->cap->create_posts ) ) {
-					wp_die( esc_html__( 'You do not have permission to duplicate this post.', 'duplicate-as' ) );
-				}
+			} elseif ( ! is_string( $post_type_obj->cap->create_posts ) || ! current_user_can( $post_type_obj->cap->create_posts ) ) {
+				wp_die( esc_html__( 'You do not have permission to duplicate this post.', 'duplicate-as' ) );
 			}
 
 			return $post;
@@ -447,13 +445,13 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 		 * @return void
 		 */
 		public function handle_admin_duplicate(): void {
-			if ( ! isset( $_GET['post'] ) || ! is_numeric( $_GET['post'] ) ) {
+			if ( ! isset( $_GET['post'] ) || ! is_numeric( $_GET['post'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				wp_die( esc_html__( 'No post specified.', 'duplicate-as' ) );
 			}
 
-			$post_id = absint( $_GET['post'] );
-			$nonce   = isset( $_GET['_wpnonce'] ) && is_string( $_GET['_wpnonce'] )
-				? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) )
+			$post_id = absint( $_GET['post'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$nonce   = isset( $_GET['_wpnonce'] ) && is_string( $_GET['_wpnonce'] ) // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				: null;
 
 			if ( ! $this->verify_nonce( 'duplicate_as_duplicate_' . $post_id, $nonce ) ) {
@@ -474,14 +472,14 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 		 * @return void
 		 */
 		public function handle_admin_transform(): void {
-			if ( ! isset( $_GET['post'] ) || ! is_numeric( $_GET['post'] ) || ! isset( $_GET['target_type'] ) || ! is_string( $_GET['target_type'] ) ) {
+			if ( ! isset( $_GET['post'] ) || ! is_numeric( $_GET['post'] ) || ! isset( $_GET['target_type'] ) || ! is_string( $_GET['target_type'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				wp_die( esc_html__( 'Missing required parameters.', 'duplicate-as' ) );
 			}
 
-			$post_id     = absint( $_GET['post'] );
-			$target_type = sanitize_key( $_GET['target_type'] );
-			$nonce       = isset( $_GET['_wpnonce'] ) && is_string( $_GET['_wpnonce'] )
-				? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) )
+			$post_id     = absint( $_GET['post'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$target_type = sanitize_key( $_GET['target_type'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$nonce       = isset( $_GET['_wpnonce'] ) && is_string( $_GET['_wpnonce'] ) // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				: null;
 
 			if ( ! $this->verify_nonce( 'duplicate_as_transform_' . $post_id . '_' . $target_type, $nonce ) ) {
@@ -562,7 +560,7 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 		 * - Target post type is in allowed targets list
 		 *
 		 * @since 0.1.0
-		 * @param WP_REST_Request $request Request object containing post ID and optional target post type.
+		 * @param WP_REST_Request<array{id:int, target_post_type:string|null}> $request Request object containing post ID and optional target post type.
 		 * @return bool True if user has permission, false otherwise.
 		 *
 		 * @example
@@ -572,7 +570,7 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 		 */
 		public function check_permission( WP_REST_Request $request ): bool {
 			$post_id          = is_int( $request->get_param( 'id' ) ) ? $request->get_param( 'id' ) : 0;
-			$target_post_type = $request->get_param( 'target_post_type' );
+			$target_post_type = is_string( $request->get_param( 'target_post_type' ) ) ? $request->get_param( 'target_post_type' ) : null;
 			$post             = get_post( $post_id );
 
 			if ( ! $post ) {
@@ -630,7 +628,7 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 		 * 4. Copies featured image
 		 *
 		 * @since 0.1.0
-		 * @param WP_REST_Request $request Request object containing post ID and optional target post type.
+		 * @param WP_REST_Request<array{id:int, target_post_type:string|null}> $request Request object containing post ID and optional target post type.
 		 * @return WP_REST_Response|WP_Error Response with new post data or error.
 		 *
 		 * @example Success Response:
@@ -715,23 +713,39 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 
 
 		/**
-		 * Convert post type template to block format
+		 * Convert post type template to block format.
 		 *
 		 * WordPress post type templates are arrays where each element is:
-		 * [ 'block/name', { attributes }, [ innerBlocks ] ]
-		 *
-		 * This needs to be converted to the format that serialize_blocks expects:
 		 * [
-		 *   'blockName' => 'block/name',
-		 *   'attrs' => { attributes },
-		 *   'innerBlocks' => [ ... ],
-		 *   'innerHTML' => '',
-		 *   'innerContent' => []
+		 *   0 => string,                 // Block name (e.g. 'core/paragraph')
+		 *   1 => array<string, mixed>,   // Block attributes (optional)
+		 *   2 => array<int, array>       // Inner blocks in template format (optional, recursive)
+		 * ]
+		 *
+		 * This converts them to the structure expected by serialize_blocks():
+		 * [
+		 *   'blockName'    => string|null,
+		 *   'attrs'        => array<string, mixed>,
+		 *   'innerBlocks'  => array<int, array>, // Same structure recursively
+		 *   'innerHTML'    => string,
+		 *   'innerContent' => array<int, string>
 		 * ]
 		 *
 		 * @since 0.1.0
-		 * @param array<array> $template_blocks Post type template array.
-		 * @return array<array> Formatted blocks array for serialize_blocks.
+		 *
+		 * @param array<int, array{
+		 *     0?: string,
+		 *     1?: array<string, mixed>,
+		 *     2?: array<int, array>
+		 * }> $template_blocks Post type template blocks (recursive).
+		 *
+		 * @return array<int, array{
+		 *     blockName: string|null,
+		 *     attrs: array<string, mixed>,
+		 *     innerBlocks: array<int, array>,
+		 *     innerHTML: string,
+		 *     innerContent: array<int, string>
+		 * }> Blocks formatted for serialize_blocks().
 		 *
 		 * @example Input (post type template):
 		 * [
@@ -761,8 +775,12 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 			$blocks = array();
 			
 			foreach ( $template_blocks as $template_block ) {
+				if ( ! is_array( $template_block ) ) {
+					continue;
+				}
+				
 				// Template format: [ 'block/name', { attrs }, [ innerBlocks ] ].
-				$block_name   = $template_block[0] ?? '';
+				$block_name   = isset( $template_block[0] ) && is_string( $template_block[0] ) ? $template_block[0] : '';
 				$block_attrs  = isset( $template_block[1] ) && is_array( $template_block[1] ) ? $template_block[1] : array();
 				$inner_blocks = isset( $template_block[2] ) && is_array( $template_block[2] ) ? $template_block[2] : array();
 				
@@ -826,7 +844,7 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 			if ( $target_post_type && $target_post_type !== $post->post_type ) {
 				$target_post_type_obj = get_post_type_object( $target_post_type );
 				
-				if ( $target_post_type_obj && ! empty( $target_post_type_obj->template ) ) {
+				if ( $target_post_type_obj && ! empty( $target_post_type_obj->template ) && is_array( $target_post_type_obj->template ) ) {
 					// Convert template format to block parser format.
 					$formatted_blocks = $this->convert_template_to_blocks( $target_post_type_obj->template );
 					
@@ -874,7 +892,9 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 			 * }, 10, 3 );
 			 */
 			$new_post_data = apply_filters( 'duplicate_as_post_data', $new_post_data, $post, $target_post_type );
-
+			/** Assume this is still valid, after filtering ;)
+			 *
+			 * @phpstan-ignore-next-line */
 			$new_post_id = wp_insert_post( $new_post_data, true );
 
 			if ( is_wp_error( $new_post_id ) ) {
@@ -895,6 +915,7 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 		 * and target post types.
 		 *
 		 * @since 0.1.0
+		 *
 		 * @param int    $from_post_id     Original post ID.
 		 * @param int    $to_post_id       New post ID.
 		 * @param string $source_post_type Source post type.

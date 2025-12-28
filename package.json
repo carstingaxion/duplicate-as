@@ -4,7 +4,23 @@
     "description": "",
     "author": "Carsten Bach",
     "license": "GPL-2.0-or-later",
+	"keywords": [
+		"references", 
+		"gatherpress", 
+		"events"
+	],
+	"homepage": "https://github.com/carstingaxion/duplicate-as#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/carstingaxion/duplicate-as.git"
+	},
+	"bugs": {
+		"url": "https://github.com/carstingaxion/duplicate-as/issues"
+	},
     "main": "build/index.js",
+    "devDependencies": {
+        "@wordpress/scripts": "^30.15.0"
+    },
     "scripts": {
 		"build": "wp-scripts build --webpack-copy-php",
 		"check-engines": "wp-scripts check-engines",
@@ -26,8 +42,5 @@
 		"packages-update": "wp-scripts packages-update",
 		"plugin-zip": "wp-scripts plugin-zip",
 		"start": "wp-scripts start --blocks-manifest"
-    },
-    "devDependencies": {
-        "@wordpress/scripts": "^30.15.0"
     }
 }
