@@ -1177,7 +1177,7 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 		 */
 		public function enqueue_editor_assets(): void {
 			/** 
-			 * Sure types coming from the wp-scripts package
+			 * Safe types coming from the wp-scripts package
 			 * 
 			 * @var array{version:string, dependencies:array<string>} $asset_file
 			 */
