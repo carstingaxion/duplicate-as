@@ -1,0 +1,14 @@
+{
+	"namespace": "carstingaxion",
+	"base_dir": ".",
+	"wiki_directory": "docs/developer/hooks",
+	"github_blob_url": "https://github.com/carstingaxion/duplicate-as/blob/main/",
+	"exclude_dirs": [
+		"vendor",
+		"test"
+	],
+	"ignore_filter": [
+		"determine_current_user"
+	],
+	"top_headline": true
+}
