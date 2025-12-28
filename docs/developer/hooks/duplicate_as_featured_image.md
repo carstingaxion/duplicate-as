@@ -5,10 +5,12 @@ Filters the featured image ID to copy
 
 ## Example
 
+```php
 add_filter( 'duplicate_as_featured_image', function( $thumbnail_id, $from_id, $to_id ) {
-// Don't copy featured image
-return false;
+    // Don't copy featured image
+    return false;
 }, 10, 3 );
+```
 
 ## Parameters
 
@@ -18,7 +20,7 @@ return false;
 
 ## Files
 
-- [plugin.php:1203](https://github.com/carstingaxion/duplicate-as/blob/main/plugin.php#L1203)
+- [plugin.php:1215](https://github.com/carstingaxion/duplicate-as/blob/main/plugin.php#L1215)
 ```php
 apply_filters( 'duplicate_as_featured_image', $thumbnail_id, $from_post_id, $to_post_id )
 ```
