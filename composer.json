@@ -31,9 +31,9 @@
             "url": "https://wpackagist.org"
         },
         {
-			"type": "vcs",
-			"url": "git@github.com:akirk/extract-wp-hooks.git"
-		}
+            "type": "vcs",
+            "url": "git@github.com:akirk/extract-wp-hooks.git"
+        }
     ],
     "config": {
         "allow-plugins": {
