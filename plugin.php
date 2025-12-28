@@ -190,6 +190,122 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 		}
 
 		/**
+		 * Verify nonce for admin actions
+		 *
+		 * Validates the nonce for duplicate or transform actions.
+		 *
+		 * @since 0.1.0
+		 * @param string      $action      Nonce action name.
+		 * @param string|null $nonce_value Nonce value to verify.
+		 * @return bool True if nonce is valid.
+		 */
+		private function verify_nonce( string $action, ?string $nonce_value ): bool {
+			if ( ! $nonce_value ) {
+				return false;
+			}
+			return wp_verify_nonce( $nonce_value, $action );
+		}
+
+		/**
+		 * Validate post and permissions for duplication
+		 *
+		 * Common validation logic used by both duplicate and transform handlers.
+		 * Checks post existence, post type support, and user permissions.
+		 *
+		 * @since 0.1.0
+		 * @param int         $post_id     Post ID to validate.
+		 * @param string|null $target_type Optional target post type for transformation.
+		 * @return WP_Post Post object if valid.
+		 * @throws Exception Dies with error message if validation fails.
+		 */
+		private function validate_post_and_permissions( int $post_id, ?string $target_type = null ): WP_Post {
+			$post = get_post( $post_id );
+			
+			if ( ! $post ) {
+				wp_die( esc_html__( 'Post not found.', 'duplicate-as' ) );
+			}
+
+			// Check if source post type exists and has required capabilities.
+			$post_type_obj = get_post_type_object( $post->post_type );
+			if ( ! $post_type_obj || ! is_string( $post_type_obj->cap->edit_post ) ) {
+				wp_die( esc_html__( 'Post type not found for duplication.', 'duplicate-as' ) );
+			}
+
+			// Check if post type supports duplication.
+			if ( ! $this->is_post_type_allowed( $post->post_type ) ) {
+				wp_die( esc_html__( 'This post type cannot be duplicated.', 'duplicate-as' ) );
+			}
+
+			// Check user permissions for source post.
+			if ( ! current_user_can( $post_type_obj->cap->edit_post, $post_id ) ) {
+				wp_die( esc_html__( 'You do not have permission to duplicate this post.', 'duplicate-as' ) );
+			}
+
+			// If target type specified, validate it and check permissions.
+			if ( $target_type ) {
+				$target_post_type_obj = get_post_type_object( $target_type );
+				if ( ! $target_post_type_obj || ! is_string( $target_post_type_obj->cap->create_posts ) ) {
+					wp_die( esc_html__( 'Target post type does not exist.', 'duplicate-as' ) );
+				}
+				
+				if ( ! current_user_can( $target_post_type_obj->cap->create_posts ) ) {
+					wp_die( esc_html__( 'You do not have permission to create posts of the target type.', 'duplicate-as' ) );
+				}
+
+				// Check if transformation is allowed.
+				$allowed_targets = $this->get_transform_targets( $post->post_type );
+				if ( ! in_array( $target_type, $allowed_targets, true ) ) {
+					wp_die( esc_html__( 'This transformation is not allowed.', 'duplicate-as' ) );
+				}
+			} else {
+				// Check user permissions for creating posts of source type.
+				if ( ! is_string( $post_type_obj->cap->create_posts ) || ! current_user_can( $post_type_obj->cap->create_posts ) ) {
+					wp_die( esc_html__( 'You do not have permission to duplicate this post.', 'duplicate-as' ) );
+				}
+			}
+
+			return $post;
+		}
+
+		/**
+		 * Process duplication and redirect
+		 *
+		 * Common logic for performing duplication/transformation and redirecting to edit screen.
+		 *
+		 * @since 0.1.0
+		 * @param WP_Post     $post        Post to duplicate.
+		 * @param string|null $target_type Target post type (null for duplication).
+		 * @return void Dies after redirect.
+		 */
+		private function process_duplication_and_redirect( WP_Post $post, ?string $target_type = null ): void {
+			$new_post_id = $this->create_duplicate( $post, $target_type );
+
+			if ( is_wp_error( $new_post_id ) ) {
+				wp_die( esc_html( $new_post_id->get_error_message() ) );
+			}
+
+			$source_post_type = $post->post_type;
+			$final_post_type  = $target_type ? $target_type : $post->post_type;
+			
+			$this->copy_taxonomies( $post->ID, $new_post_id, $source_post_type, $final_post_type );
+			$this->copy_post_meta( $post->ID, $new_post_id );
+			$this->copy_featured_image( $post->ID, $new_post_id );
+
+			/**
+			 * Fires after a post has been duplicated
+			 *
+			 * @since 0.1.0
+			 *
+			 * @param int $new_post_id The ID of the newly created duplicate post.
+			 * @param int $post->ID    The ID of the original post.
+			 */
+			do_action( 'duplicate_as_after_duplicate', $new_post_id, $post->ID );
+
+			wp_safe_redirect( (string) get_edit_post_link( $new_post_id, 'raw' ) );
+			exit;
+		}
+
+		/**
 		 * Add action links to post list table
 		 *
 		 * Adds "Duplicate" and "Duplicate as {Type}" links to the post row actions.
@@ -273,7 +389,7 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 
 					// Check if target post type exists.
 					$target_post_type_obj = get_post_type_object( $target );
-					if ( ! $target_post_type_obj || ! is_string( $target_post_type_obj->cap->create_posts ) ) {
+					if ( ! $target_post_type_obj || ! is_string( $target_post_type_obj->cap->create_posts ) || ! is_string( $target_post_type_obj->labels->singular_name ) ) {
 						continue;
 					}
 					
@@ -331,56 +447,21 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 		 * @return void
 		 */
 		public function handle_admin_duplicate(): void {
-			// Check if post ID is provided.
-			if ( ! isset( $_GET['post'] ) || ! is_int( $_GET['post'] ) ) {
+			if ( ! isset( $_GET['post'] ) || ! is_numeric( $_GET['post'] ) ) {
 				wp_die( esc_html__( 'No post specified.', 'duplicate-as' ) );
 			}
 
 			$post_id = absint( $_GET['post'] );
-			$post    = get_post( $post_id );
 			$nonce   = isset( $_GET['_wpnonce'] ) && is_string( $_GET['_wpnonce'] )
 				? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) )
-				: '';
+				: null;
 
-			if ( ! $post ) {
-				wp_die( esc_html__( 'Post not found.', 'duplicate-as' ) );
-			}
-
-			// Verify nonce.
-			if ( ! wp_verify_nonce( $nonce, 'duplicate_as_duplicate_' . $post_id ) ) {
+			if ( ! $this->verify_nonce( 'duplicate_as_duplicate_' . $post_id, $nonce ) ) {
 				wp_die( esc_html__( 'Security check failed.', 'duplicate-as' ) );
 			}
 
-			// Check if post type exists.
-			$post_type_obj = get_post_type_object( $post->post_type );
-			if ( ! $post_type_obj || ! is_string( $post_type_obj->cap->edit_post ) || ! is_string( $post_type_obj->cap->create_posts ) ) {
-				wp_die( esc_html__( 'Post type not found for duplication.', 'duplicate-as' ) );
-			}
-
-			// Check if post type supports duplication.
-			if ( ! $this->is_post_type_allowed( $post->post_type ) ) {
-				wp_die( esc_html__( 'This post type cannot be duplicated.', 'duplicate-as' ) );
-			}
-
-			// Check user permissions.
-			if ( ! current_user_can( $post_type_obj->cap->edit_post, $post_id ) || ! current_user_can( $post_type_obj->cap->create_posts ) ) {
-				wp_die( esc_html__( 'You do not have permission to duplicate this post.', 'duplicate-as' ) );
-			}
-
-			// Perform duplication.
-			$new_post_id = $this->create_duplicate( $post, null );
-
-			if ( is_wp_error( $new_post_id ) ) {
-				wp_die( esc_html( $new_post_id->get_error_message() ) );
-			}
-
-			$this->copy_taxonomies( $post_id, $new_post_id, $post->post_type, $post->post_type );
-			$this->copy_post_meta( $post_id, $new_post_id );
-			$this->copy_featured_image( $post_id, $new_post_id );
-
-			// Redirect to edit screen.
-			wp_safe_redirect( get_edit_post_link( $new_post_id, 'raw' ) );
-			exit;
+			$post = $this->validate_post_and_permissions( $post_id );
+			$this->process_duplication_and_redirect( $post );
 		}
 
 		/**
@@ -393,69 +474,22 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 		 * @return void
 		 */
 		public function handle_admin_transform(): void {
-			// Check if post ID and target type are provided.
-			if ( ! isset( $_GET['post'] ) || ! isset( $_GET['target_type'] ) ) {
+			if ( ! isset( $_GET['post'] ) || ! is_numeric( $_GET['post'] ) || ! isset( $_GET['target_type'] ) || ! is_string( $_GET['target_type'] ) ) {
 				wp_die( esc_html__( 'Missing required parameters.', 'duplicate-as' ) );
 			}
 
 			$post_id     = absint( $_GET['post'] );
 			$target_type = sanitize_key( $_GET['target_type'] );
-			$post        = get_post( $post_id );
 			$nonce       = isset( $_GET['_wpnonce'] ) && is_string( $_GET['_wpnonce'] )
 				? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) )
-				: '';
+				: null;
 
-			if ( ! $post ) {
-				wp_die( esc_html__( 'Post not found.', 'duplicate-as' ) );
-			}
-
-			// Verify nonce - must match the format used when creating the URL.
-			if ( ! wp_verify_nonce( $nonce, 'duplicate_as_transform_' . $post_id . '_' . $target_type ) ) {
+			if ( ! $this->verify_nonce( 'duplicate_as_transform_' . $post_id . '_' . $target_type, $nonce ) ) {
 				wp_die( esc_html__( 'Security check failed.', 'duplicate-as' ) );
 			}
 
-			// Check if source post type exists.
-			$post_type_obj = get_post_type_object( $post->post_type );
-			if ( ! $post_type_obj || ! is_string( $post_type_obj->cap->edit_post ) ) {
-				wp_die( esc_html__( 'Post type not found for duplication.', 'duplicate-as' ) );
-			}
-
-			// Check user permissions for source post type.
-			if ( ! current_user_can( $post_type_obj->cap->edit_post, $post_id ) ) {
-				wp_die( esc_html__( 'You do not have permission to transform this post.', 'duplicate-as' ) );
-			}
-
-			// Check if target post type exists.
-			$target_post_type_obj = get_post_type_object( $target_type );
-			if ( ! $target_post_type_obj || ! is_string( $target_post_type_obj->cap->create_posts ) ) {
-				wp_die( esc_html__( 'Target post type does not exist.', 'duplicate-as' ) );
-			}
-			
-			// Check user permissions for target post type.
-			if ( ! current_user_can( $target_post_type_obj->cap->create_posts ) ) {
-				wp_die( esc_html__( 'You do not have permission to create posts of the target type.', 'duplicate-as' ) );
-			}
-
-			// Check if transformation is allowed.
-			$allowed_targets = $this->get_transform_targets( $post->post_type );
-			if ( ! in_array( $target_type, $allowed_targets, true ) ) {
-				wp_die( esc_html__( 'This transformation is not allowed.', 'duplicate-as' ) );
-			}
-
-			// Perform transformation.
-			$new_post_id = $this->create_duplicate( $post, $target_type );
-
-			if ( is_wp_error( $new_post_id ) ) {
-				wp_die( esc_html( $new_post_id->get_error_message() ) );
-			}
-
-			$this->copy_taxonomies( $post_id, $new_post_id, $post->post_type, $target_type );
-			$this->copy_post_meta( $post_id, $new_post_id );
-			$this->copy_featured_image( $post_id, $new_post_id );
-
-			// Redirect to edit screen.
-			wp_safe_redirect( get_edit_post_link( $new_post_id, 'raw' ) );
-			exit;
+			$post = $this->validate_post_and_permissions( $post_id, $target_type );
+			$this->process_duplication_and_redirect( $post, $target_type );
 		}
 
 		/**
@@ -509,7 +543,7 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 							'type'              => 'string',
 							'required'          => false,
 							'validate_callback' => function ( $param ): bool {
-								return empty( $param ) || post_type_exists( $param );
+								return ( empty( $param ) || ! is_string( $param ) ) || post_type_exists( $param );
 							},
 						),
 					),
@@ -537,7 +571,7 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 		 * $request->get_param( 'target_post_type' ); // Target post type (string, optional)
 		 */
 		public function check_permission( WP_REST_Request $request ): bool {
-			$post_id          = $request->get_param( 'id' );
+			$post_id          = is_int( $request->get_param( 'id' ) ) ? $request->get_param( 'id' ) : 0;
 			$target_post_type = $request->get_param( 'target_post_type' );
 			$post             = get_post( $post_id );
 
@@ -549,8 +583,12 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 				return false;
 			}
 
-			// Check if user can edit the source post.
+			// Check if post type exists.
 			$source_post_type_obj = get_post_type_object( $post->post_type );
+			if ( ! $source_post_type_obj || ! is_string( $source_post_type_obj->cap->edit_post ) || ! is_string( $source_post_type_obj->cap->create_posts ) ) {
+				return false;
+			}
+			// Check if user can edit the source post.
 			if ( ! current_user_can( $source_post_type_obj->cap->edit_post, $post_id ) ) {
 				return false;
 			}
@@ -564,8 +602,13 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 					return false;
 				}
 				
-				// Check permission for target post type.
+				// Check if post type exists.
 				$target_post_type_obj = get_post_type_object( $target_post_type );
+				if ( ! $target_post_type_obj || ! is_string( $target_post_type_obj->cap->create_posts ) ) {
+					return false;
+				}
+
+				// Check permission for target post type.
 				if ( ! current_user_can( $target_post_type_obj->cap->create_posts ) ) {
 					return false;
 				}
@@ -606,8 +649,8 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 		 * }
 		 */
 		public function duplicate_as_endpoint( WP_REST_Request $request ): WP_REST_Response|WP_Error {
-			$post_id          = $request->get_param( 'id' );
-			$target_post_type = $request->get_param( 'target_post_type' );
+			$post_id          = is_int( $request->get_param( 'id' ) ) ? $request->get_param( 'id' ) : 0;
+			$target_post_type = is_string( $request->get_param( 'target_post_type' ) ) ? $request->get_param( 'target_post_type' ) : null;
 			$post             = get_post( $post_id );
 
 			if ( ! $post ) {
@@ -832,7 +875,7 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 			 */
 			$new_post_data = apply_filters( 'duplicate_as_post_data', $new_post_data, $post, $target_post_type );
 
-			$new_post_id = wp_insert_post( $new_post_data );
+			$new_post_id = wp_insert_post( $new_post_data, true );
 
 			if ( is_wp_error( $new_post_id ) ) {
 				return new WP_Error(
@@ -894,7 +937,7 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 			
 			foreach ( $taxonomies as $taxonomy ) {
 				// Double-check the taxonomy is registered for the target post type.
-				if ( ! is_object_in_taxonomy( $target_post_type, $taxonomy ) ) {
+				if ( ! is_string( $taxonomy ) || ! is_object_in_taxonomy( $target_post_type, $taxonomy ) ) {
 					continue;
 				}
 				
@@ -981,6 +1024,9 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 				}
 	
 				foreach ( $meta_values as $meta_value ) {
+					if ( ! is_string( $meta_value ) ) {
+						continue;
+					}
 					$meta_value = maybe_unserialize( $meta_value );
 					
 					/**
