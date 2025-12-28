@@ -148,38 +148,4 @@ Initial release
 
 # Developer Notes
 
-## Adding Post Type Support
-
-```php
-add_post_type_support( 'my_custom_post_type', 'duplicate_as' );
-```
-
-## Adding Transform Support
-
-```php
-// Transform pages to posts
-add_post_type_support( 'page', 'duplicate_as', 'post' );
-```
-
-## Filtering Post Data
-
-```php
-add_filter(
-    'duplicate_as_post_data',
-    function ( $post_data, $original_post, $target_post_type ) {
-        $post_data['post_title'] = 'Copy of ' . $post_data['post_title'];
-        return $post_data;
-    },
-    10,
-    3
-);
-```
-
-## Excluding Meta Keys
-
-```php
-add_filter( 'duplicate_as_excluded_meta_keys', function ( $excluded_keys ) {
-    $excluded_keys[] = 'my_custom_meta_key';
-    return $excluded_keys;
-} );
-```
+Take a look at the short [Developer Documentation](docs/developer/README.md) and the [list of filter & action hooks](docs/developer/hooks/Hooks.md).
