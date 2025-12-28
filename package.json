@@ -1,13 +1,13 @@
 {
     "name": "duplicate-as",
     "version": "0.1.0",
-    "description": "",
+    "description": "Duplicate or Duplicate as different post type, directly from the Editor Sidebar or the Admin List Tables.",
     "author": "Carsten Bach",
     "license": "GPL-2.0-or-later",
 	"keywords": [
-		"references", 
-		"gatherpress", 
-		"events"
+		"duplication", 
+		"posttype-converter", 
+		"wordpress"
 	],
 	"homepage": "https://github.com/carstingaxion/duplicate-as#readme",
 	"repository": {

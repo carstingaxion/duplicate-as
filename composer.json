@@ -1,6 +1,6 @@
 {
     "name": "carstingaxion/duplicate-as",
-    "description": "... like the figuren.theater WordPress Multisite network.",
+    "description": "Duplicate or Duplicate as different post type, directly from the Editor Sidebar or the Admin List Tables.",
     "license": "GPL-3.0+",
     "type": "wordpress-plugin",
     "keywords": [

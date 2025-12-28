@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:       Duplicate as
- * Description:       Duplicate and transform posts with ease. Add quick action links to post lists and a button in the editor to duplicate posts or transform them to different post types with all content and metadata intact.
+ * Description:       Duplicate or Duplicate as different post type, directly from the Editor Sidebar or the Admin List Tables.
  * Version:           0.1.0
  * Requires at least: 6.0
  * Requires PHP:      7.4
