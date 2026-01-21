@@ -3,7 +3,7 @@
 **Contributors:** carstenbach & WordPress Telex  
 **Tags:** duplicate, post, page, editor, block-editor  
 **Tested up to:** 6.8  
-**Stable tag:** 0.1.0  
+**Stable tag:** 0.2.0  
 **License:** GPLv2 or later  
 **License URI:** https://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -129,20 +129,7 @@ Yes. The plugin provides several filter hooks:
 
 ## Changelog
 
-### 0.1.0
-
-Initial release
-
-- Works on every post type, because its build based on post type supports
-- Duplicate posts and pages instantly from the Editor Sidebar or the Admin List Tables
-- Complete duplication post-data, taxonomy terms and postmeta-data (incl. featured image)
-- Can transform posts to different post types when configured  
-- New duplicates are created as drafts
-- Loading states and graceful error messages if something goes wrong  
-- Only visible to users with appropriate capabilities  
-- Proper ARIA labels and WordPress admin integration  
-- Multiple filter and action hooks for customization
-
+All notable changes to this project will be documented in the [CHANGELOG.md](CHANGELOG.md).
 
 ---
 
