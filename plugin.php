@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Duplicate as
  * Description:       Duplicate or Duplicate as different post type, directly from the Editor Sidebar or the Admin List Tables.
- * Version:           0.1.0
+ * Version:           0.2.0
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            cb + WordPress Telex
