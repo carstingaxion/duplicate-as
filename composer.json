@@ -22,7 +22,7 @@
         "source": "https://github.com/carstingaxion/duplicate-as"
     },
     "require-dev": {
-        "akirk/extract-wp-hooks": "^1.3",
+        "akirk/extract-wp-hooks": "^1.4",
         "figuren-theater/code-quality": "*"
     },
     "repositories": [
