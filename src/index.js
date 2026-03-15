@@ -4,7 +4,7 @@
  * Thin entry point that registers the WordPress editor plugin.
  * All logic is delegated to focused modules under src/.
  *
- * @package DuplicateAs
+ * @package
  * @since   0.1.0
  */
 

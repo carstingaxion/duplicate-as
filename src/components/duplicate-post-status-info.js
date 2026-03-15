@@ -4,7 +4,7 @@
  * Container component that reads editor state, builds the list of
  * action buttons, and renders them inside PluginPostStatusInfo.
  *
- * @package DuplicateAs
+ * @package
  * @since   0.4.0
  */
 
@@ -68,7 +68,12 @@ export function DuplicatePostStatusInfo() {
 		return null;
 	}
 
-	const buttons = buildButtonConfigs( postId, postType, postTypeObject, allPostTypes );
+	const buttons = buildButtonConfigs(
+		postId,
+		postType,
+		postTypeObject,
+		allPostTypes
+	);
 
 	return (
 		<PluginPostStatusInfo className="duplicate-as-status-info">

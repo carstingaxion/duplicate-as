@@ -4,15 +4,13 @@
  * These functions have no side effects and do not depend on
  * WordPress stores or React state — making them easy to unit test.
  *
- * @package DuplicateAs
+ * @package
  * @since   0.4.0
  */
 
 /**
- * WordPress dependencies
+ * Internal dependencies
  */
-import { __ } from '@wordpress/i18n';
-
 import { DEFAULT_ICON } from './constants';
 
 /**
@@ -129,19 +127,24 @@ export function parseDashicon( icon ) {
  * @since 0.4.0
  *
  * @typedef {Object} ButtonConfig
- * @property {string}                        key                  - Unique React key.
- * @property {number}                        postId               - Current post ID.
- * @property {string|null}                   targetPostType       - Target post type (null for duplication).
- * @property {string}                        currentPostType      - Current post type slug.
- * @property {PostTypeObject|undefined}      targetPostTypeObject - Target post type object.
+ * @property {string}                   key                  - Unique React key.
+ * @property {number}                   postId               - Current post ID.
+ * @property {string|null}              targetPostType       - Target post type (null for duplication).
+ * @property {string}                   currentPostType      - Current post type slug.
+ * @property {PostTypeObject|undefined} targetPostTypeObject - Target post type object.
  *
- * @param {number}                postId         - Current post ID.
- * @param {string}                postType       - Current post type slug.
- * @param {PostTypeObject}        postTypeObject - Current post type object.
- * @param {Array<PostTypeObject>} allPostTypes   - All registered post type objects.
+ * @param    {number}                   postId               - Current post ID.
+ * @param    {string}                   postType             - Current post type slug.
+ * @param    {PostTypeObject}           postTypeObject       - Current post type object.
+ * @param    {Array<PostTypeObject>}    allPostTypes         - All registered post type objects.
  * @return {Array<ButtonConfig>} Array of button configuration objects.
  */
-export function buildButtonConfigs( postId, postType, postTypeObject, allPostTypes ) {
+export function buildButtonConfigs(
+	postId,
+	postType,
+	postTypeObject,
+	allPostTypes
+) {
 	const transformTargets = getTransformTargets( postTypeObject );
 
 	/** @type {Array<ButtonConfig>} */

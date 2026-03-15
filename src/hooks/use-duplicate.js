@@ -4,7 +4,7 @@
  * Encapsulates the duplication / transformation API call,
  * loading state, and error handling.
  *
- * @package DuplicateAs
+ * @package
  * @since   0.4.0
  */
 
@@ -22,7 +22,7 @@ import { REST_PATH } from '../constants';
  * Return value of the useDuplicate hook.
  *
  * @typedef {Object} UseDuplicateReturn
- * @property {boolean}                                   isLoading       - Whether a request is in progress.
+ * @property {boolean}                                                      isLoading       - Whether a request is in progress.
  * @property {(postId:number, targetPostType:string|null) => Promise<void>} handleDuplicate - Trigger duplication.
  */
 

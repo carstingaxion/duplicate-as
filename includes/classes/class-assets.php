@@ -98,7 +98,7 @@ if ( ! class_exists( 'Duplicate_As_Assets' ) ) {
 			wp_set_script_translations(
 				'duplicate-as-editor',
 				'duplicate-as',
-				plugin_dir_path( $this->plugin_file ) .'languages'
+				plugin_dir_path( $this->plugin_file ) . 'languages'
 			);
 
 			wp_enqueue_style(

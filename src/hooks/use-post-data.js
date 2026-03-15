@@ -4,7 +4,7 @@
  * Selects post-related data from WordPress core and editor stores
  * needed by the duplicate / transform UI.
  *
- * @package DuplicateAs
+ * @package
  * @since   0.4.0
  */
 
@@ -19,8 +19,8 @@ import { store as coreStore } from '@wordpress/core-data';
  * Editor select return object.
  *
  * @typedef {Object} PostData
- * @property {number}                   postId         - Current post ID.
- * @property {string}                   postType       - Current post type slug.
+ * @property {number}                                      postId         - Current post ID.
+ * @property {string}                                      postType       - Current post type slug.
  * @property {import('../utils').PostTypeObject|undefined} postTypeObject - Full post type object with supports.
  * @property {Array<import('../utils').PostTypeObject>}    allPostTypes   - All registered post types.
  */

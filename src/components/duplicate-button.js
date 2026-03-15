@@ -4,7 +4,7 @@
  * Renders a single duplicate or transform button with the correct
  * label, icon, and loading state.
  *
- * @package DuplicateAs
+ * @package
  * @since   0.4.0
  */
 
@@ -22,9 +22,9 @@ import { useDuplicate } from '../hooks/use-duplicate';
  * Duplicate button component props.
  *
  * @typedef {Object} DuplicateButtonProps
- * @property {number}                                    postId               - Current post ID.
- * @property {string|null}                               targetPostType       - Target post type (null for duplication).
- * @property {string}                                    currentPostType      - Current post type slug.
+ * @property {number}                                      postId               - Current post ID.
+ * @property {string|null}                                 targetPostType       - Target post type (null for duplication).
+ * @property {string}                                      currentPostType      - Current post type slug.
  * @property {import('../utils').PostTypeObject|undefined} targetPostTypeObject - Target post type object.
  */
 

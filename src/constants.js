@@ -1,7 +1,7 @@
 /**
  * Shared constants for the Duplicate As plugin.
  *
- * @package DuplicateAs
+ * @package
  * @since   0.4.0
  */
 

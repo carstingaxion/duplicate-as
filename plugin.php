@@ -38,18 +38,18 @@ if ( ! defined( 'DUPLICATE_AS_PLUGIN_FILE' ) ) {
 	define( 'DUPLICATE_AS_PLUGIN_FILE', __FILE__ );
 }
 
-/**
- * Autoload class files from includes/classes directory.
- *
- * Maps class names to file paths using WordPress naming conventions:
- * - Class: Duplicate_As_Post_Type_Support
- * - File:  includes/classes/class-post-type-support.php
- *
- * @since 0.3.0
- * @param string $class_name Fully qualified class name to autoload.
- * @return void
- */
 if ( ! function_exists( 'duplicate_as_autoloader' ) ) {
+	/**
+	 * Autoload class files from includes/classes directory.
+	 *
+	 * Maps class names to file paths using WordPress naming conventions:
+	 * - Class: Duplicate_As_Post_Type_Support
+	 * - File:  includes/classes/class-post-type-support.php
+	 *
+	 * @since 0.3.0
+	 * @param string $class_name Fully qualified class name to autoload.
+	 * @return void
+	 */
 	function duplicate_as_autoloader( string $class_name ): void {
 		// Only autoload classes with our prefix.
 		if ( 0 !== strpos( $class_name, 'Duplicate_As_' ) ) {
@@ -57,7 +57,7 @@ if ( ! function_exists( 'duplicate_as_autoloader' ) ) {
 		}
 
 		// Convert class name to file name.
-		// Duplicate_As_Post_Type_Support -> post-type-support
+		// Example: Duplicate_As_Post_Type_Support -> post-type-support.
 		$file_name = str_replace( 'Duplicate_As_', '', $class_name );
 		$file_name = strtolower( str_replace( '_', '-', $file_name ) );
 		$file_path = plugin_dir_path( DUPLICATE_AS_PLUGIN_FILE ) . 'includes/classes/class-' . $file_name . '.php';
