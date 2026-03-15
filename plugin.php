@@ -857,19 +857,13 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 		 *
 		 * @since 0.1.0
 		 *
-		 * @param array<int, array{
-		 *     0?: string,
-		 *     1?: array<string, mixed>,
-		 *     2?: array<int, array>
-		 * }> $template_blocks Post type template blocks (recursive).
+		 * @phpstan-param array<int, array{0?: string, 1?: array<string, mixed>, 2?: array<int, array<mixed>>}> $template_blocks
 		 *
-		 * @return array<int, array{
-		 *     blockName: string|null,
-		 *     attrs: array<string, mixed>,
-		 *     innerBlocks: array<int, array>,
-		 *     innerHTML: string,
-		 *     innerContent: array<int, string>
-		 * }> Blocks formatted for serialize_blocks().
+		 * @param array<int, array<mixed>> $template_blocks Post type template blocks (recursive).
+		 *
+		 * @phpstan-return array<int, array{blockName: string, attrs: array<string, mixed>, innerBlocks: array<int, array<mixed>>, innerHTML: string, innerContent: array<int, string>}>
+		 *
+		 * @return array<int, array<string, mixed>> Blocks formatted for serialize_blocks().
 		 *
 		 * @example Input (post type template):
 		 * [
@@ -920,13 +914,9 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 		 * @param mixed $template_block A single template block entry.
 		 *                              Expected format: array{0: string, 1?: array<string, mixed>, 2?: array<int, array>}.
 		 *
-		 * @return array{
-		 *     blockName: string,
-		 *     attrs: array<string, mixed>,
-		 *     innerBlocks: array<int, array>,
-		 *     innerHTML: string,
-		 *     innerContent: array<int, string>
-		 * }|null Block in parser format, or null if the entry is invalid.
+		 * @phpstan-return array{blockName: string, attrs: array<string, mixed>, innerBlocks: array<int, array<mixed>>, innerHTML: string, innerContent: array<int, string>}|null
+		 *
+		 * @return array<string, mixed>|null Block in parser format, or null if the entry is invalid.
 		 *
 		 * @example Input:
 		 * ['core/heading', ['level' => 2], [['core/paragraph', []]]]
@@ -950,7 +940,18 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 				return null;
 			}
 
-			$block_attrs  = isset( $template_block[1] ) && is_array( $template_block[1] ) ? $template_block[1] : array();
+			/**
+			 * This should be the shape coming from WP core.
+			 *
+			 * @var array<string, mixed> $block_attrs
+			 */
+			$block_attrs = isset( $template_block[1] ) && is_array( $template_block[1] ) ? $template_block[1] : array();
+
+			/**
+			 * This should be the shape coming from WP core.
+			 *
+			 * @var array<int, array{0?: string, 1?: array<string, mixed>, 2?: array<int, array<mixed>>}> $inner_blocks
+			 */
 			$inner_blocks = isset( $template_block[2] ) && is_array( $template_block[2] ) ? $template_block[2] : array();
 
 			return array(
@@ -1003,9 +1004,16 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 			if ( $target_post_type && $target_post_type !== $post->post_type ) {
 				$target_post_type_obj = get_post_type_object( $target_post_type );
 				
+				// @phpstan-ignore-next-line
 				if ( $target_post_type_obj && ! empty( $target_post_type_obj->template ) && is_array( $target_post_type_obj->template ) ) {
-					// Convert template format to block parser format.
-					$formatted_blocks = $this->convert_template_to_blocks( $target_post_type_obj->template );
+	
+					/**
+					 * This should be the shape coming from WP core.
+					 *
+					 * @var array<int, array{0?: string, 1?: array<string, mixed>, 2?: array<int, array<mixed>>}> $raw_template
+					 */
+					$raw_template     = $target_post_type_obj->template;
+					$formatted_blocks = $this->convert_template_to_blocks( $raw_template );
 					
 					if ( ! empty( $formatted_blocks ) ) {
 						// Serialize the formatted blocks to block markup.
