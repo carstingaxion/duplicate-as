@@ -23,7 +23,10 @@
     },
     "require-dev": {
         "akirk/extract-wp-hooks": "^1.4",
-        "figuren-theater/code-quality": "*"
+        "figuren-theater/code-quality": "*",
+        "phpunit/phpunit": "^9.6",
+        "wp-phpunit/wp-phpunit": "^6.9",
+        "yoast/phpunit-polyfills": "^2.0"
     },
     "repositories": [
         {
@@ -51,5 +54,10 @@
         "altis": {
             "install-overrides": []
         }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "test:integration": "phpunit --testsuite integration",
+        "test:unit": "phpunit --testsuite unit"
     }
 }

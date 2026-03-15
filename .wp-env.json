@@ -1,0 +1,11 @@
+{
+	"core": null,
+	"phpVersion": "8.3",
+	"env": {
+		"tests": {
+			"plugins": [
+				"."
+			]
+		}
+	}
+}
