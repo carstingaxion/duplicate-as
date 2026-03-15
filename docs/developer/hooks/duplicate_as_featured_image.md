@@ -1,7 +1,7 @@
 # duplicate_as_featured_image
 
 
-Filters the featured image ID to copy
+Filters the featured image ID to copy.
 
 ## Example
 
@@ -20,11 +20,11 @@ add_filter( 'duplicate_as_featured_image', function( $thumbnail_id, $from_id, $t
 
 ## Files
 
-- [plugin.php:1215](https://github.com/carstingaxion/duplicate-as/blob/main/plugin.php#L1215)
+- [includes/classes/class-duplicator.php:533](https://github.com/carstingaxion/duplicate-as/blob/main/includes/classes/class-duplicator.php#L533)
 ```php
 apply_filters( 'duplicate_as_featured_image', $thumbnail_id, $from_post_id, $to_post_id )
 ```
 
 
 
-[← All Hooks](Hooks)
+[← All Hooks](Hooks.md)

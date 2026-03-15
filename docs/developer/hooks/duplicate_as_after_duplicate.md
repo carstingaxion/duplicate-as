@@ -1,7 +1,7 @@
 # duplicate_as_after_duplicate
 
 
-Fires after a post has been duplicated
+Fires after a post has been duplicated.
 
 ## Auto-generated Example
 
@@ -10,7 +10,7 @@ add_action(
    'duplicate_as_after_duplicate',
     function(
         int $new_post_id,
-        int $post->ID
+        int $post_id
     ) {
         // Your code here.
     },
@@ -22,20 +22,15 @@ add_action(
 ## Parameters
 
 - *`int`* `$new_post_id` The ID of the newly created duplicate post.
-- *`int`* `$post->ID` The ID of the original post.
+- *`int`* `$post_id` The ID of the original post.
 
 ## Files
 
-- [plugin.php:352](https://github.com/carstingaxion/duplicate-as/blob/main/plugin.php#L352)
+- [includes/classes/class-duplicator.php:103](https://github.com/carstingaxion/duplicate-as/blob/main/includes/classes/class-duplicator.php#L103)
 ```php
 do_action( 'duplicate_as_after_duplicate', $new_post_id, $post->ID )
 ```
 
-- [plugin.php:794](https://github.com/carstingaxion/duplicate-as/blob/main/plugin.php#L794)
-```php
-do_action( 'duplicate_as_after_duplicate', $new_post_id, $post_id )
-```
 
 
-
-[← All Hooks](Hooks)
+[← All Hooks](Hooks.md)

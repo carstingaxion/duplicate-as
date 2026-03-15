@@ -1,7 +1,7 @@
 # duplicate_as_meta_value
 
 
-Filters the meta value before adding it to the duplicate post
+Filters the meta value before adding it to the duplicate post.
 
 ## Example
 
@@ -24,11 +24,11 @@ add_filter( 'duplicate_as_meta_value', function( $value, $key, $from_id, $to_id 
 
 ## Files
 
-- [plugin.php:1174](https://github.com/carstingaxion/duplicate-as/blob/main/plugin.php#L1174)
+- [includes/classes/class-duplicator.php:496](https://github.com/carstingaxion/duplicate-as/blob/main/includes/classes/class-duplicator.php#L496)
 ```php
 apply_filters( 'duplicate_as_meta_value', $meta_value, $meta_key, $from_post_id, $to_post_id )
 ```
 
 
 
-[← All Hooks](Hooks)
+[← All Hooks](Hooks.md)

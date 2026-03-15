@@ -1,7 +1,7 @@
 # duplicate_as_taxonomies
 
 
-Filters the taxonomies to copy during duplication
+Filters the taxonomies to copy during duplication.
 
 ## Example
 
@@ -22,11 +22,11 @@ add_filter( 'duplicate_as_taxonomies', function( $taxonomies, $from_id, $to_id, 
 
 ## Files
 
-- [plugin.php:1053](https://github.com/carstingaxion/duplicate-as/blob/main/plugin.php#L1053)
+- [includes/classes/class-duplicator.php:375](https://github.com/carstingaxion/duplicate-as/blob/main/includes/classes/class-duplicator.php#L375)
 ```php
 apply_filters( 'duplicate_as_taxonomies', $taxonomies, $from_post_id, $to_post_id, $source_post_type, $target_post_type )
 ```
 
 
 
-[← All Hooks](Hooks)
+[← All Hooks](Hooks.md)

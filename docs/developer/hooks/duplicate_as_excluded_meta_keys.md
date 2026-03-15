@@ -1,7 +1,7 @@
 # duplicate_as_excluded_meta_keys
 
 
-Filters the list of meta keys to exclude from duplication
+Filters the list of meta keys to exclude from duplication.
 
 ## Example
 
@@ -21,11 +21,11 @@ add_filter( 'duplicate_as_excluded_meta_keys', function( $excluded_keys, $from_i
 
 ## Files
 
-- [plugin.php:1140](https://github.com/carstingaxion/duplicate-as/blob/main/plugin.php#L1140)
+- [includes/classes/class-duplicator.php:462](https://github.com/carstingaxion/duplicate-as/blob/main/includes/classes/class-duplicator.php#L462)
 ```php
 apply_filters( 'duplicate_as_excluded_meta_keys', $excluded_keys, $from_post_id, $to_post_id )
 ```
 
 
 
-[← All Hooks](Hooks)
+[← All Hooks](Hooks.md)
