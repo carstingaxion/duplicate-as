@@ -665,49 +665,81 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 			$target_post_type = is_string( $request->get_param( 'target_post_type' ) ) ? $request->get_param( 'target_post_type' ) : null;
 			$post             = get_post( $post_id );
 
-			if ( ! $post ) {
+			if ( ! $post || ! $this->is_post_type_allowed( $post->post_type ) ) {
 				return false;
 			}
 
-			if ( ! $this->is_post_type_allowed( $post->post_type ) ) {
+			if ( ! $this->can_edit_source_post( $post, $post_id ) ) {
 				return false;
 			}
 
-			// Check if post type exists.
+			if ( $target_post_type ) {
+				return $this->can_transform_to_target( $post->post_type, $target_post_type );
+			}
+
+			return $this->can_create_source_posts( $post->post_type );
+		}
+
+		/**
+		 * Check if user can edit the source post
+		 *
+		 * Validates that the source post type object exists with proper capabilities
+		 * and the current user can edit the specific post.
+		 *
+		 * @since 0.2.0
+		 * @param WP_Post $post    Post object to check.
+		 * @param int     $post_id Post ID for capability check.
+		 * @return bool True if user can edit, false otherwise.
+		 */
+		private function can_edit_source_post( WP_Post $post, int $post_id ): bool {
 			$source_post_type_obj = get_post_type_object( $post->post_type );
 			if ( ! $source_post_type_obj || ! is_string( $source_post_type_obj->cap->edit_post ) || ! is_string( $source_post_type_obj->cap->create_posts ) ) {
 				return false;
 			}
-			// Check if user can edit the source post.
-			if ( ! current_user_can( $source_post_type_obj->cap->edit_post, $post_id ) ) {
-				return false;
-			}
-			
-			// If target post type is specified, verify it's allowed.
-			if ( $target_post_type ) {
-				$allowed_targets = $this->get_transform_targets( $post->post_type );
-				
-				// Check if target is in allowed list.
-				if ( ! in_array( $target_post_type, $allowed_targets, true ) ) {
-					return false;
-				}
-				
-				// Check if post type exists.
-				$target_post_type_obj = get_post_type_object( $target_post_type );
-				if ( ! $target_post_type_obj || ! is_string( $target_post_type_obj->cap->create_posts ) ) {
-					return false;
-				}
 
-				// Check permission for target post type.
-				if ( ! current_user_can( $target_post_type_obj->cap->create_posts ) ) {
-					return false;
-				}
-			} elseif ( ! current_user_can( $source_post_type_obj->cap->create_posts ) ) {
-				// No target specified - check if user can create posts of source type.
+			return current_user_can( $source_post_type_obj->cap->edit_post, $post_id );
+		}
+
+		/**
+		 * Check if user can create posts of the source post type
+		 *
+		 * @since 0.2.0
+		 * @param string $post_type Source post type slug.
+		 * @return bool True if user can create posts, false otherwise.
+		 */
+		private function can_create_source_posts( string $post_type ): bool {
+			$post_type_obj = get_post_type_object( $post_type );
+			if ( ! $post_type_obj || ! is_string( $post_type_obj->cap->create_posts ) ) {
 				return false;
 			}
 
-			return true;
+			return current_user_can( $post_type_obj->cap->create_posts );
+		}
+
+		/**
+		 * Check if user can transform to target post type
+		 *
+		 * Validates that the target post type is in the allowed targets list,
+		 * the target post type object exists, and the user has permission to create
+		 * posts of the target type.
+		 *
+		 * @since 0.2.0
+		 * @param string $source_post_type Source post type slug.
+		 * @param string $target_post_type Target post type slug.
+		 * @return bool True if transformation is allowed, false otherwise.
+		 */
+		private function can_transform_to_target( string $source_post_type, string $target_post_type ): bool {
+			$allowed_targets = $this->get_transform_targets( $source_post_type );
+			if ( ! in_array( $target_post_type, $allowed_targets, true ) ) {
+				return false;
+			}
+
+			$target_post_type_obj = get_post_type_object( $target_post_type );
+			if ( ! $target_post_type_obj || ! is_string( $target_post_type_obj->cap->create_posts ) ) {
+				return false;
+			}
+
+			return current_user_can( $target_post_type_obj->cap->create_posts );
 		}
 
 		/**
@@ -867,32 +899,67 @@ if ( ! class_exists( 'Duplicate_As' ) ) {
 			$blocks = array();
 			
 			foreach ( $template_blocks as $template_block ) {
-				if ( ! is_array( $template_block ) ) {
-					continue;
+				$block = $this->convert_single_template_block( $template_block );
+				if ( null !== $block ) {
+					$blocks[] = $block;
 				}
-				
-				// Template format: [ 'block/name', { attrs }, [ innerBlocks ] ].
-				$block_name   = isset( $template_block[0] ) && is_string( $template_block[0] ) ? $template_block[0] : '';
-				$block_attrs  = isset( $template_block[1] ) && is_array( $template_block[1] ) ? $template_block[1] : array();
-				$inner_blocks = isset( $template_block[2] ) && is_array( $template_block[2] ) ? $template_block[2] : array();
-				
-				if ( empty( $block_name ) ) {
-					continue;
-				}
-				
-				// Convert to block parser format.
-				$block = array(
-					'blockName'    => $block_name,
-					'attrs'        => $block_attrs,
-					'innerBlocks'  => ! empty( $inner_blocks ) ? $this->convert_template_to_blocks( $inner_blocks ) : array(),
-					'innerHTML'    => '',
-					'innerContent' => array(),
-				);
-				
-				$blocks[] = $block;
 			}
 			
 			return $blocks;
+		}
+
+		/**
+		 * Convert a single template block entry to block parser format.
+		 *
+		 * Parses one entry from a WordPress post type template array
+		 * and converts it to the format expected by serialize_blocks().
+		 * Recursively converts inner blocks if present.
+		 *
+		 * @since 0.2.0
+		 *
+		 * @param mixed $template_block A single template block entry.
+		 *                              Expected format: array{0: string, 1?: array<string, mixed>, 2?: array<int, array>}.
+		 *
+		 * @return array{
+		 *     blockName: string,
+		 *     attrs: array<string, mixed>,
+		 *     innerBlocks: array<int, array>,
+		 *     innerHTML: string,
+		 *     innerContent: array<int, string>
+		 * }|null Block in parser format, or null if the entry is invalid.
+		 *
+		 * @example Input:
+		 * ['core/heading', ['level' => 2], [['core/paragraph', []]]]
+		 *
+		 * @example Output:
+		 * [
+		 *   'blockName'    => 'core/heading',
+		 *   'attrs'        => ['level' => 2],
+		 *   'innerBlocks'  => [['blockName' => 'core/paragraph', ...]],
+		 *   'innerHTML'    => '',
+		 *   'innerContent' => []
+		 * ]
+		 */
+		private function convert_single_template_block( $template_block ): ?array {
+			if ( ! is_array( $template_block ) ) {
+				return null;
+			}
+
+			$block_name = isset( $template_block[0] ) && is_string( $template_block[0] ) ? $template_block[0] : '';
+			if ( empty( $block_name ) ) {
+				return null;
+			}
+
+			$block_attrs  = isset( $template_block[1] ) && is_array( $template_block[1] ) ? $template_block[1] : array();
+			$inner_blocks = isset( $template_block[2] ) && is_array( $template_block[2] ) ? $template_block[2] : array();
+
+			return array(
+				'blockName'    => $block_name,
+				'attrs'        => $block_attrs,
+				'innerBlocks'  => ! empty( $inner_blocks ) ? $this->convert_template_to_blocks( $inner_blocks ) : array(),
+				'innerHTML'    => '',
+				'innerContent' => array(),
+			);
 		}
 
 		/**
