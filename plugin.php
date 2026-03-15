@@ -9,6 +9,7 @@
  * License:           GPLv2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       duplicate-as
+ * Domain Path:       /languages
  *
  * @package DuplicateAs
  */
@@ -66,6 +67,26 @@ if ( ! function_exists( 'duplicate_as_autoloader' ) ) {
 		}
 	}
 	spl_autoload_register( 'duplicate_as_autoloader' );
+}
+
+if ( ! function_exists( 'duplicate_as_load_textdomain' ) ) {
+	/**
+	 * Load the plugin text domain for translations.
+	 *
+	 * Loads translation files from the languages/ directory within the plugin.
+	 * WordPress will also check WP_LANG_DIR/plugins/ for override translations.
+	 *
+	 * @since 0.3.0
+	 * @return void
+	 */
+	function duplicate_as_load_textdomain(): void {
+		load_plugin_textdomain(
+			'duplicate-as',
+			false,
+			dirname( plugin_basename( DUPLICATE_AS_PLUGIN_FILE ) ) . '/languages'
+		);
+	}
+	add_action( 'init', 'duplicate_as_load_textdomain' );
 }
 
 if ( ! function_exists( 'duplicate_as_init' ) ) {

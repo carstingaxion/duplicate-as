@@ -1,0 +1,127 @@
+# Copyright (C) 2026 Carsten Bach
+# This file is distributed under the GPLv2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Duplicate as 0.3.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/duplicate-as\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-03-15T23:12:01+01:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.7.1\n"
+"X-Domain: duplicate-as\n"
+
+
+#. Plugin Name of the plugin
+msgid "Duplicate as"
+msgstr ""
+
+#. Description of the plugin
+msgid "Duplicate or Duplicate as different post type, directly from the Editor Sidebar or the Admin List Tables."
+msgstr ""
+
+#. Author of the plugin
+msgid "Carsten Bach"
+msgstr ""
+
+#: includes/classes/class-admin-actions.php:94
+msgid "No post specified."
+msgstr ""
+
+#: includes/classes/class-admin-actions.php:103
+#: includes/classes/class-admin-actions.php:131
+msgid "Security check failed."
+msgstr ""
+
+#: includes/classes/class-admin-actions.php:121
+msgid "Missing required parameters."
+msgstr ""
+
+#: includes/classes/class-duplicator.php:187
+msgid "Failed to duplicate post."
+msgstr ""
+
+#: includes/classes/class-permissions.php:153
+msgid "Post type not found for duplication."
+msgstr ""
+
+#: includes/classes/class-permissions.php:168
+#: includes/classes/class-rest-api.php:225
+msgid "This post type cannot be duplicated."
+msgstr ""
+
+#: includes/classes/class-permissions.php:188
+#: includes/classes/class-permissions.php:192
+msgid "You do not have permission to duplicate this post."
+msgstr ""
+
+#: includes/classes/class-permissions.php:209
+msgid "Target post type does not exist."
+msgstr ""
+
+#: includes/classes/class-permissions.php:213
+msgid "You do not have permission to create posts of the target type."
+msgstr ""
+
+#: includes/classes/class-permissions.php:218
+msgid "This transformation is not allowed."
+msgstr ""
+
+#: includes/classes/class-permissions.php:237
+#: includes/classes/class-rest-api.php:217
+msgid "Post not found."
+msgstr ""
+
+#: includes/classes/class-rest-api.php:137
+msgid "The post ID to duplicate."
+msgstr ""
+
+#: includes/classes/class-rest-api.php:145
+msgid "The target post type for transformation."
+msgstr ""
+
+#: includes/classes/class-rest-api.php:236
+msgid "Target post type is not allowed for this post type."
+msgstr ""
+
+#. translators: Duplicate {post_title}
+#: includes/classes/class-row-actions.php:160
+msgid "Duplicate \"%s\""
+msgstr ""
+
+#: includes/classes/class-row-actions.php:164
+#: build/index.js:2
+#: src/index.js:184
+msgid "Duplicate"
+msgstr ""
+
+#. translators: Duplicate {post_title} into {target post_type singular label}
+#: includes/classes/class-row-actions.php:220
+msgid "Duplicate \"%1$s\" into %2$s"
+msgstr ""
+
+#. translators: Duplicate as {target post_type singular label}
+#. translators: %s: target post type singular name
+#: includes/classes/class-row-actions.php:228
+#: build/index.js:2
+#: src/index.js:181
+msgid "Duplicate as %s"
+msgstr ""
+
+#: build/index.js:2
+#: src/index.js:248
+msgid "Failed to transform post. Please try again."
+msgstr ""
+
+#: build/index.js:2
+#: src/index.js:252
+msgid "Failed to duplicate post. Please try again."
+msgstr ""
+
+#: build/index.js:2
+#: src/index.js:274
+msgid "Processing…"
+msgstr ""
