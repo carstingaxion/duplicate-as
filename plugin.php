@@ -18,22 +18,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-/**
- * Plugin version constant.
- *
- * @since 0.3.0
- * @var string
- */
 if ( ! defined( 'DUPLICATE_AS_VERSION' ) ) {
 	define( 'DUPLICATE_AS_VERSION', '0.3.0' );
 }
 
-/**
- * Plugin file path constant.
- *
- * @since 0.3.0
- * @var string
- */
 if ( ! defined( 'DUPLICATE_AS_PLUGIN_FILE' ) ) {
 	define( 'DUPLICATE_AS_PLUGIN_FILE', __FILE__ );
 }
