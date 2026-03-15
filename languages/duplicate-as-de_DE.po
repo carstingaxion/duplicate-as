@@ -1,0 +1,127 @@
+# German translation for Duplicate as
+# Copyright (C) 2024 cb + WordPress Telex
+# This file is distributed under the GPLv2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Duplicate as 0.3.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/duplicate-as\n"
+"POT-Creation-Date: 2026-03-15T23:12:01+01:00\n"
+"PO-Revision-Date: 2026-03-15 23:21+0100\n"
+"Last-Translator: \n"
+"Language-Team: German\n"
+"Language: de_DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.4.4\n"
+"X-Domain: duplicate-as\n"
+
+#. Plugin Name of the plugin
+msgid "Duplicate as"
+msgstr "Duplizieren als"
+
+#. Description of the plugin
+msgid ""
+"Duplicate or Duplicate as different post type, directly from the Editor "
+"Sidebar or the Admin List Tables."
+msgstr ""
+"Duplizieren oder als anderen Inhaltstyp duplizieren, direkt aus der Editor-"
+"Seitenleiste oder den Admin-Listentabellen."
+
+#. Author of the plugin
+msgid "Carsten Bach"
+msgstr ""
+
+#: includes/classes/class-admin-actions.php:94
+msgid "No post specified."
+msgstr "Kein Beitrag angegeben."
+
+#: includes/classes/class-admin-actions.php:103
+#: includes/classes/class-admin-actions.php:131
+msgid "Security check failed."
+msgstr "Sicherheitsprüfung fehlgeschlagen."
+
+#: includes/classes/class-admin-actions.php:121
+msgid "Missing required parameters."
+msgstr "Erforderliche Parameter fehlen."
+
+#: includes/classes/class-duplicator.php:187
+msgid "Failed to duplicate post."
+msgstr "Beitrag konnte nicht dupliziert werden."
+
+#: includes/classes/class-permissions.php:153
+msgid "Post type not found for duplication."
+msgstr "Inhaltstyp für die Duplizierung nicht gefunden."
+
+#: includes/classes/class-permissions.php:168
+#: includes/classes/class-rest-api.php:225
+msgid "This post type cannot be duplicated."
+msgstr "Dieser Inhaltstyp kann nicht dupliziert werden."
+
+#: includes/classes/class-permissions.php:188
+#: includes/classes/class-permissions.php:192
+msgid "You do not have permission to duplicate this post."
+msgstr "Du hast keine Berechtigung, diesen Beitrag zu duplizieren."
+
+#: includes/classes/class-permissions.php:209
+msgid "Target post type does not exist."
+msgstr "Der Ziel-Inhaltstyp existiert nicht."
+
+#: includes/classes/class-permissions.php:213
+msgid "You do not have permission to create posts of the target type."
+msgstr ""
+"Du hast keine Berechtigung, Beiträge des Ziel-Inhaltstyps zu erstellen."
+
+#: includes/classes/class-permissions.php:218
+msgid "This transformation is not allowed."
+msgstr "Diese Umwandlung ist nicht erlaubt."
+
+#: includes/classes/class-permissions.php:237
+#: includes/classes/class-rest-api.php:217
+msgid "Post not found."
+msgstr "Beitrag nicht gefunden."
+
+#: includes/classes/class-rest-api.php:137
+msgid "The post ID to duplicate."
+msgstr "Die Beitrags-ID zum Duplizieren."
+
+#: includes/classes/class-rest-api.php:145
+msgid "The target post type for transformation."
+msgstr "Der Ziel-Inhaltstyp für die Umwandlung."
+
+#: includes/classes/class-rest-api.php:236
+msgid "Target post type is not allowed for this post type."
+msgstr "Der Ziel-Inhaltstyp ist für diesen Inhaltstyp nicht erlaubt."
+
+#. translators: Duplicate {post_title}
+#: includes/classes/class-row-actions.php:160
+msgid "Duplicate \"%s\""
+msgstr "\"%s\" duplizieren"
+
+#: includes/classes/class-row-actions.php:164 build/index.js:2 src/index.js:184
+msgid "Duplicate"
+msgstr "Duplizieren"
+
+#. translators: Duplicate {post_title} into {target post_type singular label}
+#: includes/classes/class-row-actions.php:220
+msgid "Duplicate \"%1$s\" into %2$s"
+msgstr "\"%1$s\" als %2$s duplizieren"
+
+#. translators: Duplicate as {target post_type singular label}
+#. translators: %s: target post type singular name
+#: includes/classes/class-row-actions.php:228 build/index.js:2 src/index.js:181
+msgid "Duplicate as %s"
+msgstr "Duplizieren als %s"
+
+#: build/index.js:2 src/index.js:248
+msgid "Failed to transform post. Please try again."
+msgstr "Der Beitrag konnte nicht umgewandelt werden. Bitte versuche es erneut."
+
+#: build/index.js:2 src/index.js:252
+msgid "Failed to duplicate post. Please try again."
+msgstr "Der Beitrag konnte nicht dupliziert werden. Bitte versuche es erneut."
+
+#: build/index.js:2 src/index.js:274
+msgid "Processing…"
+msgstr "Wird verarbeitet …"

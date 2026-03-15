@@ -32,6 +32,9 @@
 	<rule ref="WordPress">
 		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
 	</rule>
+	<rule ref="WordPressVIPMinimum">
+		<exclude name="WordPressVIPMinimum.Files.IncludingFile.UsingVariable" />
+	</rule>
 	<rule ref="Universal">
 		<exclude name="Universal.PHP.RequireExitDieParentheses.Missing" />
 		<exclude name="Universal.Classes.RequireFinalClass.NonFinalClassFound" />

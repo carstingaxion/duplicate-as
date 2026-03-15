@@ -32,7 +32,7 @@ The plugin works with posts and pages by default and can be extended to support 
 add_post_type_support( 'page', 'duplicate_as' );
 ```
 
-| ![](assets/screenshot-1.png) | ![](assets/screenshot-2.png)  |
+| ![](.wordpress-org/screenshot-1.png) | ![](.wordpress-org/screenshot-2.png)  |
 | --- | --- |
 
 #### Example 2: Duplicate and "Duplicate as" for posts *(supported by default)*
@@ -41,7 +41,7 @@ add_post_type_support( 'page', 'duplicate_as' );
 add_post_type_support( 'post', 'duplicate_as', array('page', 'post') );
 ```
 
-| ![](assets/screenshot-3.png) | ![](assets/screenshot-4.png)  |
+| ![](.wordpress-org/screenshot-3.png) | ![](.wordpress-org/screenshot-4.png)  |
 | --- | --- |
 
 
