@@ -8,6 +8,9 @@
  * @since   0.3.0
  */
 
+/**
+ * Tests for Duplicate_As_Assets.
+ */
 class AssetsTest extends WP_UnitTestCase {
 
 	/**

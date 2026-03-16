@@ -8,6 +8,9 @@
  * @since   0.3.0
  */
 
+/**
+ * Tests for Duplicate_As_Row_Actions.
+ */
 class RowActionsTest extends WP_UnitTestCase {
 
 	/**

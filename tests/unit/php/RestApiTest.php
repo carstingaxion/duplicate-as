@@ -9,6 +9,9 @@
  * @since   0.3.0
  */
 
+/**
+ * Tests for Duplicate_As_Rest_Api.
+ */
 class RestApiTest extends WP_UnitTestCase {
 
 	/**

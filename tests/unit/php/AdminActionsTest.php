@@ -8,6 +8,9 @@
  * @since   0.3.0
  */
 
+/**
+ * Tests for Duplicate_As_Admin_Actions.
+ */
 class AdminActionsTest extends WP_UnitTestCase {
 
 	/**

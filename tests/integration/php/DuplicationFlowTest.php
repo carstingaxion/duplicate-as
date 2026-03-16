@@ -9,6 +9,9 @@
  * @since   0.3.0
  */
 
+/**
+ * Tests for the complete duplication flow.
+ */
 class DuplicationFlowTest extends WP_UnitTestCase {
 
 	/**
@@ -274,7 +277,7 @@ class DuplicationFlowTest extends WP_UnitTestCase {
 		$duplicator = Duplicate_As_Duplicator::get_instance();
 		$new_id     = $duplicator->duplicate( $post );
 
-		$new_meta = get_post_meta( $new_id, '_multi_meta' );
+		$new_meta = get_post_meta( $new_id, '_multi_meta', false );
 		$this->assertCount( 3, $new_meta );
 		$this->assertContains( 'value_1', $new_meta );
 		$this->assertContains( 'value_2', $new_meta );

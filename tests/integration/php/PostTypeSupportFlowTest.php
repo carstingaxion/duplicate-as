@@ -9,6 +9,9 @@
  * @since   0.3.0
  */
 
+/**
+ * Integration tests for post type support configuration.
+ */
 class PostTypeSupportFlowTest extends WP_UnitTestCase {
 
 	/**
@@ -51,7 +54,7 @@ class PostTypeSupportFlowTest extends WP_UnitTestCase {
 	/**
 	 * Test simple duplication-only support.
 	 *
-	 * add_post_type_support( 'page', 'duplicate_as' )
+	 * Tries to add post type support for 'page' with 'duplicate_as'.
 	 *
 	 * @return void
 	 */
@@ -65,7 +68,7 @@ class PostTypeSupportFlowTest extends WP_UnitTestCase {
 	/**
 	 * Test duplication and transformation support with array.
 	 *
-	 * add_post_type_support( 'page', 'duplicate_as', array('page', 'post') )
+	 * Tries to add post type support for 'page' with 'duplicate_as' and an array of targets.
 	 *
 	 * @return void
 	 */
@@ -81,7 +84,7 @@ class PostTypeSupportFlowTest extends WP_UnitTestCase {
 	/**
 	 * Test transformation-only support (no self in array).
 	 *
-	 * add_post_type_support( 'page', 'duplicate_as', array('post') )
+	 * Tries to add post type support for 'page' with 'duplicate_as' and an array of targets that does not include 'page' itself.
 	 *
 	 * @return void
 	 */
@@ -171,8 +174,6 @@ class PostTypeSupportFlowTest extends WP_UnitTestCase {
 	public function test_permissions_integration_with_rest(): void {
 		add_post_type_support( 'post', 'duplicate_as', array( 'page', 'post' ) );
 
-		$post_id     = self::factory()->post->create();
-		$rest_api    = Duplicate_As_Rest_Api::get_instance();
 		$permissions = Duplicate_As_Permissions::get_instance();
 
 		// Admin should be allowed.

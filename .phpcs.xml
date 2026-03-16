@@ -7,6 +7,7 @@
 
 	<exclude-pattern>*/build/*</exclude-pattern>
 	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern>tests/bootstrap.php</exclude-pattern>
 
 	<!-- Rules: figuren.theater Coding Standards -->
 	<rule ref="figurentheater" />
@@ -39,5 +40,11 @@
 		<exclude name="Universal.PHP.RequireExitDieParentheses.Missing" />
 		<exclude name="Universal.Classes.RequireFinalClass.NonFinalClassFound" />
 		<exclude name="Universal.Files.SeparateFunctionsFromOO.Mixed" />
+	</rule>
+	<rule ref="Universal.FunctionDeclarations.NoLongClosures.ExceedsRecommended">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+	<rule ref="Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed">
+		<exclude-pattern>tests/*</exclude-pattern>
 	</rule>
 </ruleset>

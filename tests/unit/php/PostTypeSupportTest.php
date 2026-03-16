@@ -9,6 +9,9 @@
  * @since   0.3.0
  */
 
+/**
+ * Tests for Duplicate_As_Post_Type_Support
+ */
 class PostTypeSupportTest extends WP_UnitTestCase {
 
 	/**

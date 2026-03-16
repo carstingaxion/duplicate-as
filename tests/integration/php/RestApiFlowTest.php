@@ -8,6 +8,9 @@
  * @since   0.3.0
  */
 
+/**
+ * Tests for the REST API duplication flow.
+ */
 class RestApiFlowTest extends WP_UnitTestCase {
 
 	/**
@@ -40,7 +43,8 @@ class RestApiFlowTest extends WP_UnitTestCase {
 		parent::set_up();
 
 		global $wp_rest_server;
-		$this->server = $wp_rest_server = new WP_REST_Server();
+		$wp_rest_server = new WP_REST_Server();
+		$this->server   = $wp_rest_server;
 		do_action( 'rest_api_init' );
 
 		$this->admin_user_id      = self::factory()->user->create( array( 'role' => 'administrator' ) );

@@ -9,6 +9,9 @@
  * @since   0.3.0
  */
 
+/**
+ * Tests for Duplicate_As_Duplicator.
+ */
 class DuplicatorTest extends WP_UnitTestCase {
 
 	/**

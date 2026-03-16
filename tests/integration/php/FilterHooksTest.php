@@ -9,6 +9,9 @@
  * @since   0.3.0
  */
 
+/**
+ * Tests for separate filter hooks.
+ */
 class FilterHooksTest extends WP_UnitTestCase {
 
 	/**

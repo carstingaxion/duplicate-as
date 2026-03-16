@@ -9,6 +9,9 @@
  * @since   0.3.0
  */
 
+/**
+ * Tests for the main plugin file and bootstrapping
+ */
 class MainPluginTest extends WP_UnitTestCase {
 
 	/**
