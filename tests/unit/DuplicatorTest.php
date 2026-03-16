@@ -62,7 +62,7 @@ class DuplicatorTest extends WP_UnitTestCase {
 				'post_status'  => 'publish',
 			)
 		);
-		$post = get_post( $post_id );
+		$post    = get_post( $post_id );
 
 		$new_post_id = $this->duplicator->duplicate( $post );
 
@@ -82,7 +82,7 @@ class DuplicatorTest extends WP_UnitTestCase {
 				'post_title' => 'My Important Title',
 			)
 		);
-		$post = get_post( $post_id );
+		$post    = get_post( $post_id );
 
 		$new_post_id = $this->duplicator->duplicate( $post );
 		$new_post    = get_post( $new_post_id );
@@ -103,7 +103,7 @@ class DuplicatorTest extends WP_UnitTestCase {
 				'post_content' => $content,
 			)
 		);
-		$post = get_post( $post_id );
+		$post    = get_post( $post_id );
 
 		$new_post_id = $this->duplicator->duplicate( $post );
 		$new_post    = get_post( $new_post_id );
@@ -123,7 +123,7 @@ class DuplicatorTest extends WP_UnitTestCase {
 				'post_status' => 'publish',
 			)
 		);
-		$post = get_post( $post_id );
+		$post    = get_post( $post_id );
 
 		$new_post_id = $this->duplicator->duplicate( $post );
 		$new_post    = get_post( $new_post_id );
@@ -143,7 +143,7 @@ class DuplicatorTest extends WP_UnitTestCase {
 				'post_excerpt' => 'This is the excerpt.',
 			)
 		);
-		$post = get_post( $post_id );
+		$post    = get_post( $post_id );
 
 		$new_post_id = $this->duplicator->duplicate( $post );
 		$new_post    = get_post( $new_post_id );
@@ -163,7 +163,7 @@ class DuplicatorTest extends WP_UnitTestCase {
 				'comment_status' => 'closed',
 			)
 		);
-		$post = get_post( $post_id );
+		$post    = get_post( $post_id );
 
 		$new_post_id = $this->duplicator->duplicate( $post );
 		$new_post    = get_post( $new_post_id );
@@ -183,7 +183,7 @@ class DuplicatorTest extends WP_UnitTestCase {
 				'ping_status' => 'closed',
 			)
 		);
-		$post = get_post( $post_id );
+		$post    = get_post( $post_id );
 
 		$new_post_id = $this->duplicator->duplicate( $post );
 		$new_post    = get_post( $new_post_id );
@@ -203,7 +203,7 @@ class DuplicatorTest extends WP_UnitTestCase {
 				'menu_order' => 5,
 			)
 		);
-		$post = get_post( $post_id );
+		$post    = get_post( $post_id );
 
 		$new_post_id = $this->duplicator->duplicate( $post );
 		$new_post    = get_post( $new_post_id );
@@ -242,7 +242,7 @@ class DuplicatorTest extends WP_UnitTestCase {
 
 		$new_post_id = $this->duplicator->duplicate( $post );
 
-		$new_tags     = wp_get_post_tags( $new_post_id, array( 'fields' => 'names' ) );
+		$new_tags = wp_get_post_tags( $new_post_id, array( 'fields' => 'names' ) );
 		$this->assertContains( 'tag-one', $new_tags );
 		$this->assertContains( 'tag-two', $new_tags );
 	}
@@ -303,20 +303,8 @@ class DuplicatorTest extends WP_UnitTestCase {
 	 */
 	public function test_duplicate_copies_featured_image(): void {
 		$post_id      = self::factory()->post->create();
-		$thumbnail_id = self::factory()->attachment->create_upload_object(
-			DIR_TESTDATA . '/images/test-image.jpg',
-			$post_id
-		);
-
-		// If test image doesn't exist, create a simple attachment.
-		if ( ! $thumbnail_id ) {
-			$thumbnail_id = self::factory()->attachment->create(
-				array(
-					'post_parent' => $post_id,
-					'post_type'   => 'attachment',
-				)
-			);
-		}
+		$file         = DIR_TESTDATA . '/images/test-image.jpg';
+		$thumbnail_id = self::factory()->attachment->create_upload_object( $file, $post_id );
 
 		set_post_thumbnail( $post_id, $thumbnail_id );
 		$post = get_post( $post_id );
@@ -339,7 +327,7 @@ class DuplicatorTest extends WP_UnitTestCase {
 				'post_content' => 'Some content here.',
 			)
 		);
-		$post = get_post( $post_id );
+		$post    = get_post( $post_id );
 
 		$new_post_id = $this->duplicator->duplicate( $post, 'page' );
 		$new_post    = get_post( $new_post_id );
@@ -399,7 +387,7 @@ class DuplicatorTest extends WP_UnitTestCase {
 				'post_title' => 'Original Title',
 			)
 		);
-		$post = get_post( $post_id );
+		$post    = get_post( $post_id );
 
 		$new_post_id = $this->duplicator->duplicate( $post );
 		$new_post    = get_post( $new_post_id );
@@ -477,12 +465,9 @@ class DuplicatorTest extends WP_UnitTestCase {
 		add_filter( 'duplicate_as_featured_image', '__return_false' );
 
 		$post_id      = self::factory()->post->create();
-		$thumbnail_id = self::factory()->attachment->create(
-			array(
-				'post_parent' => $post_id,
-				'post_type'   => 'attachment',
-			)
-		);
+		$file         = DIR_TESTDATA . '/images/test-image.jpg';
+		$thumbnail_id = self::factory()->attachment->create_upload_object( $file, $post_id );
+
 		set_post_thumbnail( $post_id, $thumbnail_id );
 		$post = get_post( $post_id );
 

@@ -39,8 +39,8 @@ class PermissionsTest extends WP_UnitTestCase {
 	 */
 	public function set_up(): void {
 		parent::set_up();
-		$this->permissions      = Duplicate_As_Permissions::get_instance();
-		$this->admin_user_id    = self::factory()->user->create( array( 'role' => 'administrator' ) );
+		$this->permissions        = Duplicate_As_Permissions::get_instance();
+		$this->admin_user_id      = self::factory()->user->create( array( 'role' => 'administrator' ) );
 		$this->subscriber_user_id = self::factory()->user->create( array( 'role' => 'subscriber' ) );
 	}
 

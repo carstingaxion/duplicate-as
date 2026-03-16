@@ -243,6 +243,7 @@ class FilterHooksTest extends WP_UnitTestCase {
 	 */
 	public function test_featured_image_filter_params(): void {
 		$received_params = array();
+		$file            = DIR_TESTDATA . '/images/test-image.jpg';
 
 		add_filter(
 			'duplicate_as_featured_image',
@@ -255,12 +256,8 @@ class FilterHooksTest extends WP_UnitTestCase {
 		);
 
 		$post_id      = self::factory()->post->create();
-		$thumbnail_id = self::factory()->attachment->create(
-			array(
-				'post_parent' => $post_id,
-				'post_type'   => 'attachment',
-			)
-		);
+		$thumbnail_id = self::factory()->attachment->create_upload_object( $file, $post_id );
+
 		set_post_thumbnail( $post_id, $thumbnail_id );
 		$post = get_post( $post_id );
 		$this->duplicator->duplicate( $post );

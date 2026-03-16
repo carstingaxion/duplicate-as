@@ -145,10 +145,10 @@ class AdminActionsTest extends WP_UnitTestCase {
 	 * @return void
 	 */
 	public function test_handle_admin_transform_invalid_nonce(): void {
-		$post_id              = self::factory()->post->create();
-		$_GET['post']         = $post_id;
-		$_GET['target_type']  = 'page';
-		$_GET['_wpnonce']     = 'invalid_nonce';
+		$post_id             = self::factory()->post->create();
+		$_GET['post']        = $post_id;
+		$_GET['target_type'] = 'page';
+		$_GET['_wpnonce']    = 'invalid_nonce';
 
 		$this->expectException( WPDieException::class );
 		$this->admin_actions->handle_admin_transform();

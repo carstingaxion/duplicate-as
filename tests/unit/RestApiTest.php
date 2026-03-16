@@ -62,10 +62,16 @@ class RestApiTest extends WP_UnitTestCase {
 	 * @return void
 	 */
 	public function test_rest_route_registered(): void {
-		$this->rest_api->register_rest_routes();
+		// Initialize the REST server which triggers rest_api_init,
+		// where our routes are registered via the hook.
+		global $wp_rest_server;
+		$wp_rest_server = new WP_REST_Server();
+		do_action( 'rest_api_init' );
 
-		$routes = rest_get_server()->get_routes();
+		$routes = $wp_rest_server->get_routes();
 		$this->assertArrayHasKey( '/duplicate-as/v1/duplicate/(?P<id>\\d+)', $routes );
+
+		$wp_rest_server = null;
 	}
 
 	/**

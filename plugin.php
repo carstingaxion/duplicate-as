@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! defined( 'DUPLICATE_AS_VERSION' ) ) {
-	define( 'DUPLICATE_AS_VERSION', '0.3.0' );
+	define( 'DUPLICATE_AS_VERSION', current( get_file_data( __FILE__, array( 'Version' ), 'plugin' ) ) );
 }
 
 if ( ! defined( 'DUPLICATE_AS_PLUGIN_FILE' ) ) {

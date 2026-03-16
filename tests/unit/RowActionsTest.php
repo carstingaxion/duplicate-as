@@ -139,9 +139,9 @@ class RowActionsTest extends WP_UnitTestCase {
 		wp_set_current_user( $this->admin_user_id );
 		add_post_type_support( 'post', 'duplicate_as' );
 
-		$post_id    = self::factory()->post->create();
-		$post       = get_post( $post_id );
-		$existing   = array( 'edit' => '<a href="#">Edit</a>' );
+		$post_id  = self::factory()->post->create();
+		$post     = get_post( $post_id );
+		$existing = array( 'edit' => '<a href="#">Edit</a>' );
 
 		$actions = $this->row_actions->add_row_actions( $existing, $post );
 

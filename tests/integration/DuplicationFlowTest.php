@@ -50,6 +50,8 @@ class DuplicationFlowTest extends WP_UnitTestCase {
 	 * @return void
 	 */
 	public function test_complete_duplication_flow(): void {
+		$file = DIR_TESTDATA . '/images/test-image.jpg';
+
 		// Set up source post with all metadata.
 		$cat_id  = self::factory()->category->create( array( 'name' => 'Integration Cat' ) );
 		$post_id = self::factory()->post->create(
@@ -63,18 +65,14 @@ class DuplicationFlowTest extends WP_UnitTestCase {
 				'menu_order'     => 3,
 			)
 		);
+		
 
 		wp_set_post_categories( $post_id, array( $cat_id ) );
 		wp_set_post_tags( $post_id, array( 'int-tag-1', 'int-tag-2' ) );
 		add_post_meta( $post_id, '_custom_field_a', 'value_a' );
 		add_post_meta( $post_id, '_custom_field_b', 'value_b' );
 
-		$thumbnail_id = self::factory()->attachment->create(
-			array(
-				'post_parent' => $post_id,
-				'post_type'   => 'attachment',
-			)
-		);
+		$thumbnail_id = self::factory()->attachment->create_upload_object( $file, $post_id );
 		set_post_thumbnail( $post_id, $thumbnail_id );
 
 		// Perform duplication.
@@ -170,7 +168,7 @@ class DuplicationFlowTest extends WP_UnitTestCase {
 				'post_title' => 'Multiple Copies',
 			)
 		);
-		$post = get_post( $post_id );
+		$post    = get_post( $post_id );
 
 		$duplicator = Duplicate_As_Duplicator::get_instance();
 		$ids        = array();
@@ -204,7 +202,7 @@ class DuplicationFlowTest extends WP_UnitTestCase {
 				'post_title' => 'Parent Page',
 			)
 		);
-		$child_id = self::factory()->post->create(
+		$child_id  = self::factory()->post->create(
 			array(
 				'post_type'   => 'page',
 				'post_title'  => 'Child Page',
@@ -226,7 +224,7 @@ class DuplicationFlowTest extends WP_UnitTestCase {
 	 * @return void
 	 */
 	public function test_duplication_with_serialized_meta(): void {
-		$post_id = self::factory()->post->create();
+		$post_id       = self::factory()->post->create();
 		$complex_value = array(
 			'key1' => 'value1',
 			'key2' => array( 'nested' => true ),
