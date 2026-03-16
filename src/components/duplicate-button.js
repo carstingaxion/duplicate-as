@@ -82,7 +82,6 @@ export function DuplicateButton( {
 	return (
 		<Button
 			variant="secondary"
-			isPressed={ false }
 			isBusy={ isLoading }
 			onClick={ () => handleDuplicate( postId, targetPostType ) }
 			disabled={ isLoading }
