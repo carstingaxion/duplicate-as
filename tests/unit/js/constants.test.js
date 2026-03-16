@@ -1,7 +1,7 @@
 /**
  * Unit tests for src/constants.js
  *
- * @package DuplicateAs\Tests\Unit\JS
+ * @package
  * @since   0.3.0
  */
 
