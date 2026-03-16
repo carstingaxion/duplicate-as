@@ -1,7 +1,7 @@
 # duplicate_as_taxonomy_terms
 
 
-Filters the terms to copy for a specific taxonomy
+Filters the terms to copy for a specific taxonomy.
 
 ## Example
 
@@ -24,11 +24,11 @@ add_filter( 'duplicate_as_taxonomy_terms', function( $terms, $taxonomy, $from_id
 
 ## Files
 
-- [plugin.php:1088](https://github.com/carstingaxion/duplicate-as/blob/main/plugin.php#L1088)
+- [includes/classes/class-duplicator.php:410](https://github.com/carstingaxion/duplicate-as/blob/main/includes/classes/class-duplicator.php#L410)
 ```php
 apply_filters( 'duplicate_as_taxonomy_terms', $terms, $taxonomy, $from_post_id, $to_post_id )
 ```
 
 
 
-[← All Hooks](Hooks)
+[← All Hooks](Hooks.md)

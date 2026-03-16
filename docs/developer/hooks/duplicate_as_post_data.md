@@ -1,7 +1,7 @@
 # duplicate_as_post_data
 
 
-Filters the post data before creating a duplicate
+Filters the post data before creating a duplicate.
 
 Allows modification of post data before the duplicate is created.
 
@@ -23,11 +23,11 @@ add_filter( 'duplicate_as_post_data', function( $post_data, $original_post, $tar
 
 ## Files
 
-- [plugin.php:988](https://github.com/carstingaxion/duplicate-as/blob/main/plugin.php#L988)
+- [includes/classes/class-duplicator.php:177](https://github.com/carstingaxion/duplicate-as/blob/main/includes/classes/class-duplicator.php#L177)
 ```php
 apply_filters( 'duplicate_as_post_data', $new_post_data, $post, $target_post_type )
 ```
 
 
 
-[← All Hooks](Hooks)
+[← All Hooks](Hooks.md)
