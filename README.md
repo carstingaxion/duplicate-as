@@ -3,7 +3,7 @@
 **Contributors:** carstenbach & WordPress Telex  
 **Tags:** duplicate, post, page, editor, block-editor  
 **Tested up to:** 6.8  
-**Stable tag:** 0.2.0  
+**Stable tag:** 0.3.0  
 **License:** GPLv2 or later  
 **License URI:** https://www.gnu.org/licenses/gpl-2.0.html  
 
