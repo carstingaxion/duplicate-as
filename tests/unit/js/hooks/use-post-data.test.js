@@ -4,7 +4,7 @@
  * Tests the usePostData hook that selects post-related data
  * from WordPress core and editor stores.
  *
- * @package DuplicateAs\Tests\Unit\JS
+ * @package
  * @since   0.3.0
  */
 
