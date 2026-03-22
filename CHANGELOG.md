@@ -2,7 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased](https://github.com/carstingaxion/duplicate-as/compare/0.3.0...HEAD)
+## [Unreleased](https://github.com/carstingaxion/duplicate-as/compare/0.3.1...HEAD)
+
+## [0.3.1](https://github.com/carstingaxion/duplicate-as/compare/0.3.0...0.3.1) - 2026-03-22
+
+* Ignore tests from distribution
 
 ## [0.3.0](https://github.com/carstingaxion/duplicate-as/compare/0.2.0...0.3.0) - 2026-03-22
 
