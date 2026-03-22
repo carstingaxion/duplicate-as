@@ -19,6 +19,7 @@
 .stylelintrc.js
 .travis.yml
 .typos.toml
+babel.config.js
 CLAUDE.md
 CODE_OF_CONDUCT.md
 composer.json
@@ -28,7 +29,6 @@ Gruntfile.js
 jest.config.js
 package.json
 package-lock.json
-.phpcs.xml
 phpcs.xml
 phpcs.xml.dist
 phpcs.ruleset.xml
@@ -67,6 +67,7 @@ bin
 multisite.xml
 multisite.xml.dist
 test
+tests
 *.mp4
 *.sql
 *.tar.gz
