@@ -3,7 +3,7 @@
  *
  * Tests the container component that reads editor state and renders buttons.
  *
- * @package DuplicateAs\Tests\Unit\JS
+ * @package
  * @since   0.3.0
  */
 
@@ -177,8 +177,8 @@ describe( 'DuplicatePostStatusInfo', () => {
 		};
 
 		render( <DuplicatePostStatusInfo /> );
-		expect(
-			screen.getByTestId( 'plugin-post-status-info' )
-		).toHaveClass( 'duplicate-as-status-info' );
+		expect( screen.getByTestId( 'plugin-post-status-info' ) ).toHaveClass(
+			'duplicate-as-status-info'
+		);
 	} );
 } );

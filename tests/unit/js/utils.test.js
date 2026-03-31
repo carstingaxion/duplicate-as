@@ -4,7 +4,7 @@
  * Tests all pure utility functions: getTransformTargets, parseDashicon,
  * buildButtonConfigs, and hasDuplicateSupport.
  *
- * @package DuplicateAs\Tests\Unit\JS
+ * @package
  * @since   0.3.0
  */
 
@@ -185,7 +185,9 @@ describe( 'buildButtonConfigs', () => {
 	const makePostType = ( slug, overrides = {} ) => ( {
 		slug,
 		supports: { duplicate_as: true },
-		labels: { singular_name: slug.charAt( 0 ).toUpperCase() + slug.slice( 1 ) },
+		labels: {
+			singular_name: slug.charAt( 0 ).toUpperCase() + slug.slice( 1 ),
+		},
 		icon: 'dashicons-admin-' + slug,
 		...overrides,
 	} );
@@ -270,12 +272,7 @@ describe( 'buildButtonConfigs', () => {
 		const withUnknown = makePostType( 'page', {
 			supports: { duplicate_as: [ [ 'unknown_type' ] ] },
 		} );
-		const buttons = buildButtonConfigs(
-			1,
-			'page',
-			withUnknown,
-			allTypes
-		);
+		const buttons = buildButtonConfigs( 1, 'page', withUnknown, allTypes );
 
 		expect( buttons[ 0 ].targetPostTypeObject ).toBeUndefined();
 	} );
