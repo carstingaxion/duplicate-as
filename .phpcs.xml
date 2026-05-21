@@ -29,7 +29,7 @@
 			</property>
 
 		</properties>
-	</rule> 
+	</rule>
 	<rule ref="WordPress">
 		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
 	</rule>

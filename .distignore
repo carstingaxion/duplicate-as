@@ -29,6 +29,7 @@ Gruntfile.js
 jest.config.js
 package.json
 package-lock.json
+.phpcs.xml
 phpcs.xml
 phpcs.xml.dist
 phpcs.ruleset.xml
