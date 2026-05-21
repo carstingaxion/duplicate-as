@@ -2,7 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased](https://github.com/carstingaxion/duplicate-as/compare/0.3.1...HEAD)
+## [Unreleased](https://github.com/carstingaxion/duplicate-as/compare/0.3.2...HEAD)
+
+## [0.3.2](https://github.com/carstingaxion/duplicate-as/compare/0.3.1...0.3.2) - 2026-05-21
+
+- https://github.com/carstingaxion/duplicate-as/commit/8d3489e6bcadf6a2e6503a56addbff2947702947 Enable default support for `gatherpress_play` from the [gatherpress-productions](https://github.com/carstingaxion/gatherpress-productions) plugin
 
 ## [0.3.1](https://github.com/carstingaxion/duplicate-as/compare/0.3.0...0.3.1) - 2026-03-22
 
