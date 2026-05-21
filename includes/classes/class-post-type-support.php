@@ -85,6 +85,7 @@ if ( ! class_exists( 'Duplicate_As_Post_Type_Support' ) ) {
 		public function add_default_support(): void {
 			add_post_type_support( 'page', 'duplicate_as' );
 			add_post_type_support( 'post', 'duplicate_as', array( 'page', 'post', 'gatherpress_event' ) );
+			add_post_type_support( 'gatherpress_play', 'duplicate_as', array( 'gatherpress_event' ) );
 		}
 
 		/**
