@@ -1,4 +1,8 @@
 
+## RestApiTest.php
+
+- [`rest_api_init`](rest_api_init.md)
+
 ## class-duplicator.php
 
 - [`duplicate_as_after_duplicate`](duplicate_as_after_duplicate.md) Fires after a post has been duplicated.
