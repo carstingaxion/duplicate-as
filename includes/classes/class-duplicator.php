@@ -92,6 +92,8 @@ if ( ! class_exists( 'Duplicate_As_Duplicator' ) ) {
 			$this->copy_post_meta( $post->ID, $new_post_id );
 			$this->copy_featured_image( $post->ID, $new_post_id );
 
+			$this->copy_shadow_taxonomy( $post, $new_post_id, $source_post_type, $final_post_type );
+
 			/**
 			 * Fires after a post has been duplicated.
 			 *
@@ -322,6 +324,108 @@ if ( ! class_exists( 'Duplicate_As_Duplicator' ) ) {
 				'innerHTML'    => '',
 				'innerContent' => array(),
 			);
+		}
+
+		/**
+		 * Assign GatherPress shadow taxonomy term from source to target post.
+		 *
+		 * If the source post type supports 'gatherpress-shadow-source', it proves
+		 * the post has a shadow taxonomy term with the same name and slug (preceded
+		 * by an underscore). The shadow taxonomy name is `_` followed by the source
+		 * post type slug.
+		 *
+		 * This method checks whether the target post type is an object type registered
+		 * for that shadow taxonomy. If so, it assigns the shadow term from the source
+		 * post to the target post.
+		 *
+		 * @since 0.4.0
+		 *
+		 * @param \WP_Post $from_post      Original post object.
+		 * @param int      $to_post_id       New post ID.
+		 * @param string   $source_post_type Source post type slug.
+		 * @param string   $target_post_type Target post type slug.
+		 * @return void
+		 *
+		 * @example Shadow taxonomy naming convention:
+		 * // Source post type: 'gatherpress_event'
+		 * // Shadow taxonomy:  '_gatherpress_event'
+		 * // Shadow term slug: '_<post_name>' (e.g. '_my-event')
+		 *
+		 * @example Post type registration with shadow source support:
+		 * // add_post_type_support( 'gatherpress_event', 'gatherpress-shadow-source' );
+		 * // register_taxonomy( '_gatherpress_event', [ 'gatherpress_event', 'gatherpress_venue' ] );
+		 * // When duplicating an event as a venue, the shadow term gets assigned to the new venue.
+		 */
+		private function copy_shadow_taxonomy( \WP_Post $from_post, int $to_post_id, string $source_post_type, string $target_post_type ): void {
+			// Check if the source post type supports GatherPress shadow source.
+			if ( ! post_type_supports( $source_post_type, 'gatherpress-shadow-source' ) ) {
+				return;
+			}
+
+			// Derive the shadow taxonomy name: '_' + source post type slug.
+			$shadow_taxonomy = '_' . $source_post_type;
+
+			// Verify the shadow taxonomy exists.
+			if ( ! taxonomy_exists( $shadow_taxonomy ) ) {
+				return;
+			}
+
+			// Check if the target post type is registered for this shadow taxonomy.
+			if ( ! is_object_in_taxonomy( $target_post_type, $shadow_taxonomy ) ) {
+				return;
+			}
+
+			// Get the shadow term that belongs to the source post.
+			$from_post_id = $from_post->ID;
+			$shadow_term  = get_term_by(
+				'slug',
+				'_' . $from_post->post_name,
+				$shadow_taxonomy
+			);
+			if ( ! $shadow_term instanceof \WP_Term ) {
+				return;
+			}
+
+			/**
+			 * Filters the shadow taxonomy terms to assign to the duplicated post.
+			 *
+			 * Allows modification or removal of shadow terms before they are
+			 * assigned to the new post during duplication or transformation.
+			 *
+			 * @since 0.4.0
+			 *
+			 * @param \WP_Term   $shadow_term    The shadow term object retrieved for the source post.
+			 * @param string     $shadow_taxonomy The shadow taxonomy name (e.g. '_gatherpress_event').
+			 * @param int        $from_post_id    The original post ID.
+			 * @param int        $to_post_id      The duplicate post ID.
+			 * @param string     $source_post_type Source post type slug.
+			 * @param string     $target_post_type Target post type slug.
+			 *
+			 * @example
+			 * ```php
+			 * add_filter( 'duplicate_as_shadow_term', function( $terms, $taxonomy, $from_id, $to_id ) {
+			 *     // Don't copy shadow terms for a specific taxonomy.
+			 *     if ( '_gatherpress_event' === $taxonomy ) {
+			 *         return array();
+			 *     }
+			 *     return $terms;
+			 * }, 10, 4 );
+			 * ```
+			 */
+			$shadow_term = apply_filters(
+				'duplicate_as_shadow_term',
+				$shadow_term,
+				$shadow_taxonomy,
+				$from_post_id,
+				$to_post_id,
+				$source_post_type,
+				$target_post_type
+			);
+
+			// @phpstan-ignore-next-line
+			if ( $shadow_term instanceof \WP_Term ) {
+				wp_set_object_terms( $to_post_id, $shadow_term->term_id, $shadow_taxonomy );
+			}
 		}
 
 		/**
