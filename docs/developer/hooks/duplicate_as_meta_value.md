@@ -24,7 +24,7 @@ add_filter( 'duplicate_as_meta_value', function( $value, $key, $from_id, $to_id 
 
 ## Files
 
-- [includes/classes/class-duplicator.php:496](https://github.com/carstingaxion/duplicate-as/blob/main/includes/classes/class-duplicator.php#L496)
+- [includes/classes/class-duplicator.php:600](https://github.com/carstingaxion/duplicate-as/blob/main/includes/classes/class-duplicator.php#L600)
 ```php
 apply_filters( 'duplicate_as_meta_value', $meta_value, $meta_key, $from_post_id, $to_post_id )
 ```

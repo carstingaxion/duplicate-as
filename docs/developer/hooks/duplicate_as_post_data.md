@@ -23,7 +23,7 @@ add_filter( 'duplicate_as_post_data', function( $post_data, $original_post, $tar
 
 ## Files
 
-- [includes/classes/class-duplicator.php:177](https://github.com/carstingaxion/duplicate-as/blob/main/includes/classes/class-duplicator.php#L177)
+- [includes/classes/class-duplicator.php:179](https://github.com/carstingaxion/duplicate-as/blob/main/includes/classes/class-duplicator.php#L179)
 ```php
 apply_filters( 'duplicate_as_post_data', $new_post_data, $post, $target_post_type )
 ```

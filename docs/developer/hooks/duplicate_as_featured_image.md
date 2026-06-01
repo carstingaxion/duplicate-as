@@ -20,7 +20,7 @@ add_filter( 'duplicate_as_featured_image', function( $thumbnail_id, $from_id, $t
 
 ## Files
 
-- [includes/classes/class-duplicator.php:533](https://github.com/carstingaxion/duplicate-as/blob/main/includes/classes/class-duplicator.php#L533)
+- [includes/classes/class-duplicator.php:637](https://github.com/carstingaxion/duplicate-as/blob/main/includes/classes/class-duplicator.php#L637)
 ```php
 apply_filters( 'duplicate_as_featured_image', $thumbnail_id, $from_post_id, $to_post_id )
 ```
