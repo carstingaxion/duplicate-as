@@ -21,7 +21,7 @@ add_filter( 'duplicate_as_excluded_meta_keys', function( $excluded_keys, $from_i
 
 ## Files
 
-- [includes/classes/class-duplicator.php:462](https://github.com/carstingaxion/duplicate-as/blob/main/includes/classes/class-duplicator.php#L462)
+- [includes/classes/class-duplicator.php:566](https://github.com/carstingaxion/duplicate-as/blob/main/includes/classes/class-duplicator.php#L566)
 ```php
 apply_filters( 'duplicate_as_excluded_meta_keys', $excluded_keys, $from_post_id, $to_post_id )
 ```

@@ -26,7 +26,7 @@ add_action(
 
 ## Files
 
-- [includes/classes/class-duplicator.php:103](https://github.com/carstingaxion/duplicate-as/blob/main/includes/classes/class-duplicator.php#L103)
+- [includes/classes/class-duplicator.php:105](https://github.com/carstingaxion/duplicate-as/blob/main/includes/classes/class-duplicator.php#L105)
 ```php
 do_action( 'duplicate_as_after_duplicate', $new_post_id, $post->ID )
 ```

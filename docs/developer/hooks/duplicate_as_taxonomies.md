@@ -22,7 +22,7 @@ add_filter( 'duplicate_as_taxonomies', function( $taxonomies, $from_id, $to_id, 
 
 ## Files
 
-- [includes/classes/class-duplicator.php:375](https://github.com/carstingaxion/duplicate-as/blob/main/includes/classes/class-duplicator.php#L375)
+- [includes/classes/class-duplicator.php:479](https://github.com/carstingaxion/duplicate-as/blob/main/includes/classes/class-duplicator.php#L479)
 ```php
 apply_filters( 'duplicate_as_taxonomies', $taxonomies, $from_post_id, $to_post_id, $source_post_type, $target_post_type )
 ```

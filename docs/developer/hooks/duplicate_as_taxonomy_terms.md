@@ -24,7 +24,7 @@ add_filter( 'duplicate_as_taxonomy_terms', function( $terms, $taxonomy, $from_id
 
 ## Files
 
-- [includes/classes/class-duplicator.php:410](https://github.com/carstingaxion/duplicate-as/blob/main/includes/classes/class-duplicator.php#L410)
+- [includes/classes/class-duplicator.php:514](https://github.com/carstingaxion/duplicate-as/blob/main/includes/classes/class-duplicator.php#L514)
 ```php
 apply_filters( 'duplicate_as_taxonomy_terms', $terms, $taxonomy, $from_post_id, $to_post_id )
 ```
