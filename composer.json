@@ -25,7 +25,7 @@
         "akirk/extract-wp-hooks": "^1.4",
         "figuren-theater/code-quality": "*",
         "phpunit/phpunit": "^9.6",
-        "wp-phpunit/wp-phpunit": "^6.9",
+        "wp-phpunit/wp-phpunit": "^7.0",
         "yoast/phpunit-polyfills": "^2.0"
     },
     "repositories": [
