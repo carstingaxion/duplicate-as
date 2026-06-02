@@ -1,6 +1,6 @@
 {
     "name": "duplicate-as",
-    "version": "0.3.2",
+    "version": "0.4.0",
     "description": "Duplicate or Duplicate as different post type, directly from the Editor Sidebar or the Admin List Tables.",
     "author": "Carsten Bach",
     "license": "GPL-2.0-or-later",
