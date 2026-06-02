@@ -2,7 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased](https://github.com/carstingaxion/duplicate-as/compare/0.3.2...HEAD)
+## [Unreleased](https://github.com/carstingaxion/duplicate-as/compare/0.4.0...HEAD)
+
+## [0.4.0](https://github.com/carstingaxion/duplicate-as/compare/0.3.2...0.4.0) - 2026-06-02
+
+- Update hook docs automatically ([#61](https://github.com/carstingaxion/duplicate-as/pull/61))
+- Assign GatherPress shadow taxonomy term from source to target post ([#60](https://github.com/carstingaxion/duplicate-as/pull/60))
+
+### Dependency Updates & Maintenance
+
+- Update deps ([#63](https://github.com/carstingaxion/duplicate-as/pull/63))
+- Bump actions/checkout from 4 to 6 ([#6](https://github.com/carstingaxion/duplicate-as/pull/6))
+- Bump wp-phpunit/wp-phpunit from 6.9.4 to 7.0.0 ([#57](https://github.com/carstingaxion/duplicate-as/pull/57))
 
 ## [0.3.2](https://github.com/carstingaxion/duplicate-as/compare/0.3.1...0.3.2) - 2026-05-21
 
