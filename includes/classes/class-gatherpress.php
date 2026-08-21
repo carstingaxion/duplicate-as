@@ -101,6 +101,7 @@ if ( ! class_exists( 'Duplicate_As_Gatherpress' ) ) {
 			// GatherPress is an optional companion, not a dependency, so its
 			// classes are unknown to static analysis. The call is reached only
 			// once can_save_event_datetimes() has confirmed the class exists.
+
 			// @phpstan-ignore-next-line
 			\GatherPress\Core\Event\Setup::get_instance()->set_datetimes( $new_post_id );
 		}
