@@ -21,9 +21,19 @@ if ( ! class_exists( 'Duplicate_As_Gatherpress' ) ) {
 	 * During a duplication that hook fires from `wp_insert_post()` before the
 	 * meta has been copied, so `set_datetimes()` finds no `gatherpress_datetime`
 	 * value and returns early. The duplicate ends up with correct meta and no
-	 * table row, which means it does not appear in event lists, in the upcoming
-	 * or past queries, or in the calendar feeds until somebody opens it and
-	 * saves it again. Nothing in the UI explains why.
+	 * table row.
+	 *
+	 * The window is narrow, and worth stating precisely rather than overselling:
+	 * every later save repairs it, including publishing, since
+	 * `wp_publish_post()` fires `wp_after_insert_post()` too and the meta is in
+	 * place by then. So only an untouched duplicated draft is affected. While it
+	 * lasts, the editor looks correct, because GatherPress renders from the
+	 * derived `gatherpress_datetime_*` meta that the duplication copies, and the
+	 * admin list still shows the event, because the query joins the table with a
+	 * LEFT JOIN. What is off is the ordering, which reads a NULL datetime.
+	 *
+	 * This closes that window rather than leaving the duplicate in a state its
+	 * own plugin would never produce.
 	 *
 	 * A general duplicator cannot be expected to know about that table, so the
 	 * repair lives here, on the seam the plugin already provides, rather than in
