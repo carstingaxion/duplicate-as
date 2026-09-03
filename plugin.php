@@ -92,6 +92,7 @@ if ( ! function_exists( 'duplicate_as_init' ) ) {
 	 * 5. Admin_Actions     - Admin action handlers (depends on Permissions, Duplicator)
 	 * 6. Row_Actions       - List table links (depends on Post_Type_Support)
 	 * 7. Assets            - Editor scripts/styles (standalone)
+	 * 8. Gatherpress       - GatherPress compatibility (listens on the after-duplicate action)
 	 *
 	 * @since 0.1.0
 	 * @return void
@@ -104,6 +105,7 @@ if ( ! function_exists( 'duplicate_as_init' ) ) {
 		Duplicate_As_Admin_Actions::get_instance();
 		Duplicate_As_Row_Actions::get_instance();
 		Duplicate_As_Assets::get_instance( DUPLICATE_AS_PLUGIN_FILE );
+		Duplicate_As_Gatherpress::get_instance();
 	}
 	add_action( 'plugins_loaded', 'duplicate_as_init' );
 }

@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased](https://github.com/carstingaxion/duplicate-as/compare/0.4.1...HEAD)
 
+### Fixed
+
+- Duplicated GatherPress events now appear in GatherPress' own event queries immediately, instead of only after the duplicate is opened and saved again.
+
 ## [0.4.1](https://github.com/carstingaxion/duplicate-as/compare/0.4.0...0.4.1) - 2026-07-05
 
 * No changes, bur Re-BUILD
