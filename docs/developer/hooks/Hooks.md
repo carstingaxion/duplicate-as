@@ -1,5 +1,5 @@
 
-## RestApiFlowTest.php
+## RestApiTest.php
 
 - [`rest_api_init`](rest_api_init.md)
 

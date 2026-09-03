@@ -13,12 +13,12 @@ add_action(
 
 ## Files
 
-- [tests/integration/php/RestApiFlowTest.php:48](https://github.com/carstingaxion/duplicate-as/blob/main/tests/integration/php/RestApiFlowTest.php#L48)
+- [tests/unit/php/RestApiTest.php:72](https://github.com/carstingaxion/duplicate-as/blob/main/tests/unit/php/RestApiTest.php#L72)
 ```php
 do_action( 'rest_api_init' )
 ```
 
-- [tests/unit/php/RestApiTest.php:72](https://github.com/carstingaxion/duplicate-as/blob/main/tests/unit/php/RestApiTest.php#L72)
+- [tests/integration/php/RestApiFlowTest.php:48](https://github.com/carstingaxion/duplicate-as/blob/main/tests/integration/php/RestApiFlowTest.php#L48)
 ```php
 do_action( 'rest_api_init' )
 ```
