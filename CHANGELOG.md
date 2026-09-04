@@ -2,11 +2,40 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased](https://github.com/carstingaxion/duplicate-as/compare/0.4.1...HEAD)
+## [Unreleased](https://github.com/carstingaxion/duplicate-as/compare/0.5.0...HEAD)
 
 ### Fixed
 
 - Duplicated GatherPress events now appear in GatherPress' own event queries immediately, instead of only after the duplicate is opened and saved again.
+
+## [0.5.0](https://github.com/carstingaxion/duplicate-as/compare/0.4.1...0.5.0) - 2026-09-04
+
+### 🚀 Added
+
+- Update hook docs automatically ([#113](https://github.com/carstingaxion/duplicate-as/pull/113))
+- Write the GatherPress event row after a duplication ([#100](https://github.com/carstingaxion/duplicate-as/pull/100))
+
+### Dependency Updates & Maintenance
+
+- Bump simple-git from 3.33.0 to 3.36.0 ([#52](https://github.com/carstingaxion/duplicate-as/pull/52))
+- Bump tmp from 0.2.5 to 0.2.7 ([#59](https://github.com/carstingaxion/duplicate-as/pull/59))
+- Bump immutable from 5.1.4 to 5.1.9 ([#77](https://github.com/carstingaxion/duplicate-as/pull/77))
+- Bump websocket-driver from 0.7.4 to 0.7.5 ([#83](https://github.com/carstingaxion/duplicate-as/pull/83))
+- Bump brace-expansion from 1.1.12 to 1.1.18 ([#98](https://github.com/carstingaxion/duplicate-as/pull/98))
+- Bump fast-xml-parser from 5.5.5 to 5.11.1 ([#106](https://github.com/carstingaxion/duplicate-as/pull/106))
+- Bump svgo from 3.3.2 to 3.3.5 ([#107](https://github.com/carstingaxion/duplicate-as/pull/107))
+- Bump ip-address from 10.1.0 to 10.7.0 ([#109](https://github.com/carstingaxion/duplicate-as/pull/109))
+- Bump postcss from 8.5.6 to 8.5.28 ([#118](https://github.com/carstingaxion/duplicate-as/pull/118))
+- Bump postcss-selector-parser ([#119](https://github.com/carstingaxion/duplicate-as/pull/119))
+- Bump fast-xml-builder from 1.1.3 to 1.3.1 ([#112](https://github.com/carstingaxion/duplicate-as/pull/112))
+- Bump fast-uri from 3.1.0 to 3.1.7 ([#114](https://github.com/carstingaxion/duplicate-as/pull/114))
+- Bump nanoid from 3.3.11 to 3.3.18 ([#115](https://github.com/carstingaxion/duplicate-as/pull/115))
+- Bump follow-redirects from 1.15.11 to 1.16.0 ([#39](https://github.com/carstingaxion/duplicate-as/pull/39))
+- Bump @babel/plugin-transform-modules-systemjs from 7.28.5 to 7.29.8 ([#96](https://github.com/carstingaxion/duplicate-as/pull/96))
+- Bump the wordpress-packages group across 1 directory with 2 updates ([#26](https://github.com/carstingaxion/duplicate-as/pull/26))
+- Bump the composer group across 1 directory with 2 updates ([#101](https://github.com/carstingaxion/duplicate-as/pull/101))
+- Bump wp-phpunit/wp-phpunit from 7.0.0 to 7.1.0 ([#105](https://github.com/carstingaxion/duplicate-as/pull/105))
+- Bump actions/checkout from 6 to 7 ([#70](https://github.com/carstingaxion/duplicate-as/pull/70))
 
 ## [0.4.1](https://github.com/carstingaxion/duplicate-as/compare/0.4.0...0.4.1) - 2026-07-05
 
