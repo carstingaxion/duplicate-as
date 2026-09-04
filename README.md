@@ -1,8 +1,8 @@
 # Duplicate as
 
-**Contributors:** carstenbach & WordPress Telex  
+**Contributors:** carstenbach, WordPress Telex, wppoland  
 **Tags:** duplicate, post, page, editor, block-editor  
-**Tested up to:** 6.8  
+**Tested up to:** 7.1  
 **Stable tag:** 0.4.1  
 **License:** GPLv2 or later  
 **License URI:** https://www.gnu.org/licenses/gpl-2.0.html  
