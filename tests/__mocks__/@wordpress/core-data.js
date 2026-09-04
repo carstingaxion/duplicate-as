@@ -3,7 +3,7 @@
  *
  * Provides the store reference used by useSelect selectors.
  *
- * @package DuplicateAs\Tests
+ * @package
  * @since   0.4.0
  */
 const store = 'core';

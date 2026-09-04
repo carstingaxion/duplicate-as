@@ -4,7 +4,7 @@
  * Tests the useDuplicate hook's loading state management,
  * API call behavior, error handling, and redirect logic.
  *
- * @package DuplicateAs\Tests\Unit\JS
+ * @package
  * @since   0.3.0
  */
 
@@ -69,7 +69,8 @@ describe( 'useDuplicate', () => {
 	it( 'calls apiFetch with correct path for duplication', async () => {
 		mockApiFetch.mockResolvedValue( {
 			success: true,
-			edit_url: 'http://example.com/wp-admin/post.php?post=456&action=edit',
+			edit_url:
+				'http://example.com/wp-admin/post.php?post=456&action=edit',
 		} );
 
 		const { result } = renderHook( () => useDuplicate() );
@@ -88,7 +89,8 @@ describe( 'useDuplicate', () => {
 	it( 'calls apiFetch with target_post_type for transformation', async () => {
 		mockApiFetch.mockResolvedValue( {
 			success: true,
-			edit_url: 'http://example.com/wp-admin/post.php?post=789&action=edit',
+			edit_url:
+				'http://example.com/wp-admin/post.php?post=789&action=edit',
 		} );
 
 		const { result } = renderHook( () => useDuplicate() );

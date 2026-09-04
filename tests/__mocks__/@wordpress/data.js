@@ -4,7 +4,7 @@
  * Provides mock implementations of useSelect, useDispatch, select, and dispatch.
  * Individual tests can override these via jest.mock() if needed.
  *
- * @package DuplicateAs\Tests
+ * @package
  * @since   0.4.0
  */
 const useSelect = jest.fn( ( selector ) => selector( jest.fn() ) );

@@ -3,7 +3,7 @@
  *
  * Re-exports React primitives so components using @wordpress/element work in tests.
  *
- * @package DuplicateAs\Tests
+ * @package
  * @since   0.4.0
  */
 const React = require( 'react' );
@@ -22,5 +22,8 @@ module.exports = {
 	createPortal: require( 'react-dom' ).createPortal,
 	render: require( 'react-dom' ).render,
 	createRoot: require( 'react-dom/client' ).createRoot,
-	RawHTML: ( { children } ) => React.createElement( 'div', { dangerouslySetInnerHTML: { __html: children } } ),
+	RawHTML: ( { children } ) =>
+		React.createElement( 'div', {
+			dangerouslySetInnerHTML: { __html: children },
+		} ),
 };
