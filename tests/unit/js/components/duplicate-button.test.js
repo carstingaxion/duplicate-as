@@ -3,7 +3,7 @@
  *
  * Tests button rendering, labels, icons, loading states, and click behavior.
  *
- * @package DuplicateAs\Tests\Unit\JS
+ * @package
  * @since   0.3.0
  */
 
@@ -145,9 +145,9 @@ describe( 'DuplicateButton', () => {
 		it( 'sets isBusy when loading', () => {
 			mockIsLoading = true;
 			render( <DuplicateButton { ...defaultProps } /> );
-			expect( screen.getByRole( 'button' ).getAttribute( 'data-is-busy' ) ).toBe(
-				'true'
-			);
+			expect(
+				screen.getByRole( 'button' ).getAttribute( 'data-is-busy' )
+			).toBe( 'true' );
 		} );
 
 		it( 'is not disabled when not loading', () => {

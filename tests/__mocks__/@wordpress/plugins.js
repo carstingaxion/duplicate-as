@@ -3,7 +3,7 @@
  *
  * Provides a no-op registerPlugin function.
  *
- * @package DuplicateAs\Tests
+ * @package
  * @since   0.4.0
  */
 const registerPlugin = jest.fn();

@@ -3,7 +3,7 @@
  *
  * Provides mock implementations of editor components and store reference.
  *
- * @package DuplicateAs\Tests
+ * @package
  * @since   0.4.0
  */
 const React = require( 'react' );

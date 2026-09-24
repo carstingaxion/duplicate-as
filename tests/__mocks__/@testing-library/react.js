@@ -6,7 +6,7 @@
  *
  * Uses React 18 createRoot API to avoid ReactDOM.render deprecation warnings.
  *
- * @package DuplicateAs\Tests
+ * @package
  * @since   0.4.0
  */
 const React = require( 'react' );
@@ -73,32 +73,48 @@ const screen = {
 	getByText: ( text ) => {
 		const walk = ( node ) => {
 			for ( const child of node.childNodes ) {
-				if ( child.nodeType === 3 && child.textContent.includes( text ) ) {
+				if (
+					child.nodeType === 3 &&
+					child.textContent.includes( text )
+				) {
 					return child.parentElement;
 				}
 				const found = walk( child );
-				if ( found ) return found;
+				if ( found ) {
+					return found;
+				}
 			}
 			return null;
 		};
 		const el = walk( document.body );
 		if ( ! el ) {
-			throw new Error( `Unable to find an element with the text: ${ text }` );
+			throw new Error(
+				`Unable to find an element with the text: ${ text }`
+			);
 		}
 		return el;
 	},
 	getByRole: ( role ) => {
-		const el = document.body.querySelector( `[${ role === 'button' ? 'button' : `role="${ role }"` }]` )
-			|| ( role === 'button' ? document.body.querySelector( 'button' ) : null );
+		const el =
+			document.body.querySelector(
+				`[${ role === 'button' ? 'button' : `role="${ role }"` }]`
+			) ||
+			( role === 'button'
+				? document.body.querySelector( 'button' )
+				: null );
 		if ( ! el ) {
-			throw new Error( `Unable to find an element with the role: ${ role }` );
+			throw new Error(
+				`Unable to find an element with the role: ${ role }`
+			);
 		}
 		return el;
 	},
 	getByTestId: ( testId ) => {
 		const el = document.body.querySelector( `[data-testid="${ testId }"]` );
 		if ( ! el ) {
-			throw new Error( `Unable to find an element with data-testid: ${ testId }` );
+			throw new Error(
+				`Unable to find an element with data-testid: ${ testId }`
+			);
 		}
 		return el;
 	},
@@ -178,30 +194,37 @@ function renderHook( hookFn ) {
 if ( typeof expect !== 'undefined' && expect.extend ) {
 	expect.extend( {
 		toBeInTheDocument( received ) {
-			const pass = received !== null && document.body.contains( received );
+			const pass =
+				received !== null && document.body.contains( received );
 			return {
 				pass,
-				message: () => pass
-					? `expected element not to be in the document`
-					: `expected element to be in the document`,
+				message: () =>
+					pass
+						? `expected element not to be in the document`
+						: `expected element to be in the document`,
 			};
 		},
 		toBeDisabled( received ) {
 			const pass = received && received.disabled === true;
 			return {
 				pass,
-				message: () => pass
-					? `expected element not to be disabled`
-					: `expected element to be disabled`,
+				message: () =>
+					pass
+						? `expected element not to be disabled`
+						: `expected element to be disabled`,
 			};
 		},
 		toHaveClass( received, className ) {
-			const pass = received && received.classList && received.classList.contains( className );
+			const pass =
+				received &&
+				received.classList &&
+				received.classList.contains( className );
 			return {
 				pass,
-				message: () => pass
-					? `expected element not to have class "${ className }"`
-					: `expected element to have class "${ className }"`,
+				message: () =>
+					pass
+						? `expected element not to have class "${ className }"`
+						: `expected element to have class "${ className }"`,
 			};
 		},
 	} );

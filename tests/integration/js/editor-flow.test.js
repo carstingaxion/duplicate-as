@@ -4,7 +4,7 @@
  * Tests the full integration between hooks, utilities, and components
  * working together to render the correct UI based on post type support.
  *
- * @package DuplicateAs\Tests\Integration\JS
+ * @package
  * @since   0.3.0
  */
 
@@ -62,9 +62,7 @@ describe( 'Editor flow integration', () => {
 		} );
 
 		it( 'uses default icon for duplication button', () => {
-			expect( parseDashicon( postTypeObject.icon ) ).toBe(
-				'admin-page'
-			);
+			expect( parseDashicon( postTypeObject.icon ) ).toBe( 'admin-page' );
 		} );
 	} );
 

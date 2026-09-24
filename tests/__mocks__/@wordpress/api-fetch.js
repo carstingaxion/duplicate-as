@@ -3,7 +3,7 @@
  *
  * Default export is a jest.fn() that can be configured per test.
  *
- * @package DuplicateAs\Tests
+ * @package
  * @since   0.4.0
  */
 const apiFetch = jest.fn();

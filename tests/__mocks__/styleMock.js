@@ -4,7 +4,7 @@
  * When JS files import stylesheets, Jest cannot parse them.
  * This mock returns an empty object so imports resolve cleanly.
  *
- * @package DuplicateAs\Tests
+ * @package
  * @since   0.4.0
  */
 module.exports = {};
