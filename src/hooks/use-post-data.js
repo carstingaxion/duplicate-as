@@ -16,6 +16,18 @@ import { store as editorStore } from '@wordpress/editor';
 import { store as coreStore } from '@wordpress/core-data';
 
 /**
+ * Fallback for `allPostTypes` while post types are still loading.
+ *
+ * Kept outside the hook so `useSelect` gets the same reference on every
+ * call. A new `[]` each time makes `useSelect` warn about non-equal values
+ * and re-render the component for nothing.
+ *
+ * @since 0.5.1
+ * @type {Array}
+ */
+const EMPTY_ARRAY = [];
+
+/**
  * Editor select return object.
  *
  * @typedef {Object} PostData
@@ -41,7 +53,7 @@ export function usePostData() {
 		const currentPostType = select( editorStore ).getCurrentPostType();
 		const postTypeObj = select( coreStore ).getPostType( currentPostType );
 		const postTypes =
-			select( coreStore ).getPostTypes( { per_page: -1 } ) || [];
+			select( coreStore ).getPostTypes( { per_page: -1 } ) || EMPTY_ARRAY;
 
 		return {
 			postId: select( editorStore ).getCurrentPostId(),

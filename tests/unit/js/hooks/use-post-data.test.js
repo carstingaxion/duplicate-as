@@ -105,6 +105,13 @@ describe( 'usePostData', () => {
 		expect( result.current.allPostTypes ).toEqual( [] );
 	} );
 
+	it( 'returns the same empty array reference on every call while post types load', () => {
+		coreSelectors.getPostTypes.mockReturnValue( null );
+		const first = renderHook( () => usePostData() ).result.current;
+		const second = renderHook( () => usePostData() ).result.current;
+		expect( first.allPostTypes ).toBe( second.allPostTypes );
+	} );
+
 	it( 'returns undefined postTypeObject when getPostType returns undefined', () => {
 		coreSelectors.getPostType.mockReturnValue( undefined );
 		const { result } = renderHook( () => usePostData() );
