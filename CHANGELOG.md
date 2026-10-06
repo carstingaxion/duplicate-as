@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 
 - Duplicated GatherPress events now appear in GatherPress' own event queries immediately, instead of only after the duplicate is opened and saved again.
+- The block editor no longer logs a "Non-equal value keys: allPostTypes" warning while post types are loading.
 
 ## [0.5.0](https://github.com/carstingaxion/duplicate-as/compare/0.4.1...0.5.0) - 2026-09-04
 
