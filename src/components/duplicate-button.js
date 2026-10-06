@@ -14,7 +14,7 @@
 import { __, sprintf } from '@wordpress/i18n';
 import { Button } from '@wordpress/components';
 
-import { parseDashicon } from '../utils';
+import { getPostTypeIcon } from '../utils';
 import { DEFAULT_ICON } from '../constants';
 import { useDuplicate } from '../hooks/use-duplicate';
 
@@ -71,12 +71,13 @@ export function DuplicateButton( {
 	/**
 	 * Icon for the button.
 	 * Uses target post type icon for transform, or default duplicate icon.
-	 * Handles Dashicons format (e.g., 'dashicons-admin-post' → 'admin-post').
+	 * Resolves the new namespaced icon names from WP 7.2+ (e.g.
+	 * `core-admin/post`) and keeps Dashicon support for older values.
 	 *
-	 * @type {string}
+	 * @type {string|Object}
 	 */
 	const icon = isTransform
-		? parseDashicon( targetPostTypeObject?.icon )
+		? getPostTypeIcon( targetPostTypeObject?.icon )
 		: DEFAULT_ICON;
 
 	return (

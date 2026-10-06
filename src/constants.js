@@ -6,6 +6,11 @@
  */
 
 /**
+ * WordPress dependencies
+ */
+import { page } from '@wordpress/icons';
+
+/**
  * REST API base path for duplication endpoint.
  *
  * @since 0.4.0
@@ -14,10 +19,15 @@
 export const REST_PATH = '/duplicate-as/v1/duplicate';
 
 /**
- * Default Dashicon name used when a post type has no icon
- * or the icon format is unsupported (e.g., SVG data URI).
+ * Default icon used when a post type has no icon or the icon
+ * cannot be rendered as an editor icon (for example an SVG data
+ * URI or an image URL).
+ *
+ * This is the `page` icon from `@wordpress/icons`, matching the
+ * fallback WordPress core uses for post types without a usable icon.
  *
  * @since 0.4.0
- * @type {string}
+ * @since 0.6.0 Changed from a Dashicon name to an `@wordpress/icons` component.
+ * @type {Object}
  */
-export const DEFAULT_ICON = 'admin-page';
+export const DEFAULT_ICON = page;

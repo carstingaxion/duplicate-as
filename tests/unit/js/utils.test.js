@@ -1,19 +1,20 @@
 /**
  * Unit tests for src/utils.js
  *
- * Tests all pure utility functions: getTransformTargets, parseDashicon,
+ * Tests all pure utility functions: getTransformTargets, getPostTypeIcon,
  * buildButtonConfigs, and hasDuplicateSupport.
  *
- * @package DuplicateAs\Tests\Unit\JS
+ * @package
  * @since   0.3.0
  */
 
 import {
 	getTransformTargets,
-	parseDashicon,
+	getPostTypeIcon,
 	buildButtonConfigs,
 	hasDuplicateSupport,
 } from '../../../src/utils';
+import { DEFAULT_ICON } from '../../../src/constants';
 
 describe( 'getTransformTargets', () => {
 	it( 'returns empty array for null input', () => {
@@ -97,43 +98,81 @@ describe( 'getTransformTargets', () => {
 	} );
 } );
 
-describe( 'parseDashicon', () => {
+describe( 'getPostTypeIcon', () => {
 	it( 'returns default icon for null input', () => {
-		expect( parseDashicon( null ) ).toBe( 'admin-page' );
+		expect( getPostTypeIcon( null ) ).toBe( DEFAULT_ICON );
 	} );
 
 	it( 'returns default icon for undefined input', () => {
-		expect( parseDashicon( undefined ) ).toBe( 'admin-page' );
+		expect( getPostTypeIcon( undefined ) ).toBe( DEFAULT_ICON );
 	} );
 
 	it( 'returns default icon for empty string', () => {
-		expect( parseDashicon( '' ) ).toBe( 'admin-page' );
+		expect( getPostTypeIcon( '' ) ).toBe( DEFAULT_ICON );
 	} );
 
 	it( 'returns default icon for non-string input', () => {
-		expect( parseDashicon( 42 ) ).toBe( 'admin-page' );
+		expect( getPostTypeIcon( 42 ) ).toBe( DEFAULT_ICON );
 	} );
 
 	it( 'returns default icon for data URI (SVG)', () => {
-		expect( parseDashicon( 'data:image/svg+xml;base64,abc' ) ).toBe(
-			'admin-page'
+		expect( getPostTypeIcon( 'data:image/svg+xml;base64,abc' ) ).toBe(
+			DEFAULT_ICON
+		);
+	} );
+
+	it( 'resolves a core-admin namespaced icon name', () => {
+		expect( getPostTypeIcon( 'core-admin/post' ) ).toEqual(
+			expect.objectContaining( { name: 'post' } )
+		);
+	} );
+
+	it( 'resolves a core namespaced icon name', () => {
+		expect( getPostTypeIcon( 'core/page' ) ).toEqual(
+			expect.objectContaining( { name: 'page' } )
+		);
+	} );
+
+	it( 'resolves the pin icon used for the Posts post type', () => {
+		expect( getPostTypeIcon( 'core-admin/pin' ) ).toEqual(
+			expect.objectContaining( { name: 'pin' } )
+		);
+	} );
+
+	it( 'resolves the media icon used for attachments', () => {
+		expect( getPostTypeIcon( 'core-admin/media' ) ).toEqual(
+			expect.objectContaining( { name: 'media' } )
+		);
+	} );
+
+	it( 'returns default icon for an unknown namespaced icon name', () => {
+		expect( getPostTypeIcon( 'core-admin/not-a-real-icon' ) ).toBe(
+			DEFAULT_ICON
+		);
+	} );
+
+	it( 'returns default icon for an image URL', () => {
+		expect( getPostTypeIcon( 'https://example.com/icon.svg' ) ).toBe(
+			DEFAULT_ICON
 		);
 	} );
 
 	it( 'strips dashicons- prefix', () => {
-		expect( parseDashicon( 'dashicons-admin-post' ) ).toBe( 'admin-post' );
+		expect( getPostTypeIcon( 'dashicons-admin-post' ) ).toBe(
+			'admin-post'
+		);
 	} );
 
 	it( 'returns icon name as-is when no prefix', () => {
-		expect( parseDashicon( 'admin-post' ) ).toBe( 'admin-post' );
+		expect( getPostTypeIcon( 'admin-post' ) ).toBe( 'admin-post' );
 	} );
 
 	it( 'handles calendar icon correctly', () => {
-		expect( parseDashicon( 'dashicons-calendar' ) ).toBe( 'calendar' );
+		expect( getPostTypeIcon( 'dashicons-calendar' ) ).toBe( 'calendar' );
 	} );
 
 	it( 'handles icon without dashicons prefix', () => {
-		expect( parseDashicon( 'heart' ) ).toBe( 'heart' );
+		expect( getPostTypeIcon( 'heart' ) ).toBe( 'heart' );
 	} );
 } );
 
@@ -185,7 +224,9 @@ describe( 'buildButtonConfigs', () => {
 	const makePostType = ( slug, overrides = {} ) => ( {
 		slug,
 		supports: { duplicate_as: true },
-		labels: { singular_name: slug.charAt( 0 ).toUpperCase() + slug.slice( 1 ) },
+		labels: {
+			singular_name: slug.charAt( 0 ).toUpperCase() + slug.slice( 1 ),
+		},
 		icon: 'dashicons-admin-' + slug,
 		...overrides,
 	} );
@@ -270,12 +311,7 @@ describe( 'buildButtonConfigs', () => {
 		const withUnknown = makePostType( 'page', {
 			supports: { duplicate_as: [ [ 'unknown_type' ] ] },
 		} );
-		const buttons = buildButtonConfigs(
-			1,
-			'page',
-			withUnknown,
-			allTypes
-		);
+		const buttons = buildButtonConfigs( 1, 'page', withUnknown, allTypes );
 
 		expect( buttons[ 0 ].targetPostTypeObject ).toBeUndefined();
 	} );

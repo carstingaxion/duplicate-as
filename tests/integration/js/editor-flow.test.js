@@ -4,7 +4,7 @@
  * Tests the full integration between hooks, utilities, and components
  * working together to render the correct UI based on post type support.
  *
- * @package DuplicateAs\Tests\Integration\JS
+ * @package
  * @since   0.3.0
  */
 
@@ -12,7 +12,7 @@ import {
 	getTransformTargets,
 	buildButtonConfigs,
 	hasDuplicateSupport,
-	parseDashicon,
+	getPostTypeIcon,
 } from '../../../src/utils';
 import { REST_PATH, DEFAULT_ICON } from '../../../src/constants';
 
@@ -62,7 +62,7 @@ describe( 'Editor flow integration', () => {
 		} );
 
 		it( 'uses default icon for duplication button', () => {
-			expect( parseDashicon( postTypeObject.icon ) ).toBe(
+			expect( getPostTypeIcon( 'dashicons-admin-page' ) ).toBe(
 				'admin-page'
 			);
 		} );
@@ -169,9 +169,21 @@ describe( 'Editor flow integration', () => {
 			} );
 		} );
 
-		it( 'parses icons correctly for each target', () => {
-			expect( parseDashicon( pageType.icon ) ).toBe( 'admin-page' );
-			expect( parseDashicon( eventType.icon ) ).toBe( 'calendar' );
+		it( 'shortens dashicons for each target', () => {
+			expect( getPostTypeIcon( pageType.icon ) ).toBe( 'admin-page' );
+			expect( getPostTypeIcon( eventType.icon ) ).toBe( 'calendar' );
+		} );
+
+		it( 'resolves the new namespaced core icons for each target', () => {
+			expect( getPostTypeIcon( 'core-admin/pin' ) ).toEqual(
+				expect.objectContaining( { name: 'pin' } )
+			);
+			expect( getPostTypeIcon( 'core-admin/page' ) ).toEqual(
+				expect.objectContaining( { name: 'page' } )
+			);
+			expect( getPostTypeIcon( 'core-admin/media' ) ).toEqual(
+				expect.objectContaining( { name: 'media' } )
+			);
 		} );
 	} );
 
@@ -247,27 +259,45 @@ describe( 'Editor flow integration', () => {
 
 	describe( 'Icon fallback chain', () => {
 		it( 'uses dashicon name when valid', () => {
-			expect( parseDashicon( 'dashicons-admin-post' ) ).toBe(
+			expect( getPostTypeIcon( 'dashicons-admin-post' ) ).toBe(
 				'admin-post'
 			);
 		} );
 
 		it( 'uses icon name directly when no prefix', () => {
-			expect( parseDashicon( 'calendar' ) ).toBe( 'calendar' );
+			expect( getPostTypeIcon( 'calendar' ) ).toBe( 'calendar' );
+		} );
+
+		it( 'resolves a namespaced core icon name', () => {
+			expect( getPostTypeIcon( 'core/page' ) ).toEqual(
+				expect.objectContaining( { name: 'page' } )
+			);
+		} );
+
+		it( 'falls back to default for an unknown namespaced icon name', () => {
+			expect( getPostTypeIcon( 'core-admin/does-not-exist' ) ).toBe(
+				DEFAULT_ICON
+			);
 		} );
 
 		it( 'falls back to default for SVG data URI', () => {
-			expect( parseDashicon( 'data:image/svg+xml;base64,abc' ) ).toBe(
+			expect( getPostTypeIcon( 'data:image/svg+xml;base64,abc' ) ).toBe(
+				DEFAULT_ICON
+			);
+		} );
+
+		it( 'falls back to default for an image URL', () => {
+			expect( getPostTypeIcon( 'https://example.com/icon.svg' ) ).toBe(
 				DEFAULT_ICON
 			);
 		} );
 
 		it( 'falls back to default for null', () => {
-			expect( parseDashicon( null ) ).toBe( DEFAULT_ICON );
+			expect( getPostTypeIcon( null ) ).toBe( DEFAULT_ICON );
 		} );
 
 		it( 'falls back to default for undefined', () => {
-			expect( parseDashicon( undefined ) ).toBe( DEFAULT_ICON );
+			expect( getPostTypeIcon( undefined ) ).toBe( DEFAULT_ICON );
 		} );
 	} );
 } );
