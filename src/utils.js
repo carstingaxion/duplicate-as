@@ -9,9 +9,109 @@
  */
 
 /**
+ * WordPress dependencies
+ */
+import {
+	archive,
+	audio,
+	brush,
+	calendar,
+	category,
+	chevronLeft,
+	comment,
+	copy,
+	dashboard,
+	file,
+	grid,
+	home,
+	image,
+	link,
+	list,
+	media,
+	menu,
+	page,
+	pencil,
+	people,
+	pin,
+	plugins,
+	plus,
+	post,
+	search,
+	settings,
+	sites,
+	tag,
+	tool,
+	update,
+	video,
+	wordpress,
+} from '@wordpress/icons';
+
+/**
  * Internal dependencies
  */
 import { DEFAULT_ICON } from './constants';
+
+/**
+ * Known icon slugs mapped to their `@wordpress/icons` component.
+ *
+ * The slugs mirror the names WordPress core uses for built-in post types and
+ * admin menu items. They are registered under both collection namespaces in
+ * `ICON_MAP`, because core serves the admin icons from the `core-admin`
+ * collection while the public icon set uses the `core` collection.
+ *
+ * @since 0.6.0
+ * @type {Object<string, Object>}
+ */
+const ICONS_BY_SLUG = {
+	archive,
+	audio,
+	brush,
+	calendar,
+	category,
+	'chevron-left': chevronLeft,
+	comment,
+	copy,
+	dashboard,
+	file,
+	grid,
+	home,
+	image,
+	link,
+	list,
+	media,
+	menu,
+	page,
+	pencil,
+	people,
+	pin,
+	plugins,
+	plus,
+	post,
+	search,
+	settings,
+	sites,
+	tag,
+	tool,
+	update,
+	video,
+	wordpress,
+};
+
+/**
+ * Namespaced icon names mapped to their `@wordpress/icons` component.
+ *
+ * Namespaced names look like `collection/icon-name` (for example
+ * `core-admin/pin`), as registered through `wp_register_icon()`.
+ *
+ * @since 0.6.0
+ * @type {Object<string, Object>}
+ */
+const ICON_MAP = Object.fromEntries(
+	Object.entries( ICONS_BY_SLUG ).flatMap( ( [ slug, icon ] ) => [
+		[ `core-admin/${ slug }`, icon ],
+		[ `core/${ slug }`, icon ],
+	] )
+);
 
 /**
  * Post type object interface (shared across modules).
@@ -21,7 +121,7 @@ import { DEFAULT_ICON } from './constants';
  * @property {boolean|Array<string>|string} supports.duplicate_as - Duplicate support config.
  * @property {Object}                       labels                - Post type labels.
  * @property {string}                       labels.singular_name  - Singular name for the post type.
- * @property {string}                       [icon]                - Post type icon (Dashicon or SVG).
+ * @property {string}                       [icon]                - Post type icon (Dashicon name, namespaced icon name, or SVG).
  * @property {string}                       slug                  - Post type slug.
  */
 
@@ -77,32 +177,54 @@ export function getTransformTargets( postTypeObject ) {
 }
 
 /**
- * Parse Dashicon from a post type icon value.
+ * Resolve a post type icon value into an editor icon.
  *
- * WordPress post type icons can be:
- * - Dashicons class names (e.g., 'dashicons-admin-post')
- * - Just the icon name (e.g., 'admin-post')
- * - SVG data URIs
- * - null / undefined
+ * WordPress post type icons can be any of the following:
+ * - A namespaced icon name registered via `wp_register_icon()`, such as
+ *   `core-admin/pin` (WordPress 7.2 and later).
+ * - A Dashicon class name, such as `dashicons-admin-post`, or the bare
+ *   Dashicon name, such as `admin-post`.
+ * - An SVG data URI or an image URL.
+ * - null or undefined.
  *
- * This function extracts the Dashicon name for use with WordPress components.
+ * Dashicons and their bare names are returned as strings, because the
+ * `Button` component from `@wordpress/components` renders a string icon as
+ * a Dashicon. Namespaced icon names are resolved to the matching
+ * `@wordpress/icons` component. Anything that cannot be rendered as a
+ * Dashicon (data URIs, image URLs, and unknown namespaced names) falls back
+ * to the default icon.
  *
  * @since 0.1.0
+ * @since 0.6.0 Renamed from `parseDashicon` and returning `@wordpress/icons`
+ *              components for namespaced icon names.
  * @param {string|null|undefined} icon - Post type icon value.
- * @return {string} Dashicon name without 'dashicons-' prefix, or default icon.
+ * @return {string|Object} Dashicon name, or an `@wordpress/icons` component.
  *
  * @example
- * parseDashicon('dashicons-admin-post'); // Returns: 'admin-post'
- * parseDashicon('admin-post');           // Returns: 'admin-post'
- * parseDashicon(null);                   // Returns: 'admin-page'
+ * getPostTypeIcon('core-admin/post');      // Returns: the `post` icon component.
+ * getPostTypeIcon('core/post');            // Returns: the `post` icon component.
+ * getPostTypeIcon('dashicons-admin-post'); // Returns: 'admin-post'
+ * getPostTypeIcon('admin-post');           // Returns: 'admin-post'
+ * getPostTypeIcon('https://example.com/i');// Returns: DEFAULT_ICON
+ * getPostTypeIcon(null);                   // Returns: DEFAULT_ICON
  */
-export function parseDashicon( icon ) {
+export function getPostTypeIcon( icon ) {
 	if ( ! icon || typeof icon !== 'string' ) {
 		return DEFAULT_ICON;
 	}
 
 	// If it's a data URI (SVG), return default icon.
 	if ( icon.startsWith( 'data:' ) ) {
+		return DEFAULT_ICON;
+	}
+
+	// Namespaced icon name (e.g. `core-admin/post`) registered in WP 7.2+.
+	if ( ICON_MAP[ icon ] ) {
+		return ICON_MAP[ icon ];
+	}
+
+	// Unknown namespaced icon name, or a URL — not renderable as an icon.
+	if ( icon.includes( '/' ) || icon.includes( '://' ) ) {
 		return DEFAULT_ICON;
 	}
 

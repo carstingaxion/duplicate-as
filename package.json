@@ -18,6 +18,9 @@
         "url": "https://github.com/carstingaxion/duplicate-as/issues"
     },
     "main": "build/index.js",
+    "dependencies": {
+        "@wordpress/icons": "^15.5.0"
+    },
     "devDependencies": {
         "@wordpress/env": "^11.14.0",
         "@wordpress/scripts": "^34.2.0"

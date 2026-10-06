@@ -3,7 +3,7 @@
  *
  * Tests button rendering, labels, icons, loading states, and click behavior.
  *
- * @package DuplicateAs\Tests\Unit\JS
+ * @package
  * @since   0.3.0
  */
 
@@ -47,7 +47,10 @@ describe( 'DuplicateButton', () => {
 		it( 'uses default icon for duplication', () => {
 			render( <DuplicateButton { ...defaultProps } /> );
 			const button = screen.getByRole( 'button' );
-			expect( button.getAttribute( 'data-icon' ) ).toBe( 'admin-page' );
+			expect( button.getAttribute( 'data-icon' ) ).toBe( 'page' );
+			expect( button.getAttribute( 'data-icon-is-object' ) ).toBe(
+				'true'
+			);
 		} );
 
 		it( 'calls handleDuplicate with postId and null on click', () => {
@@ -79,6 +82,37 @@ describe( 'DuplicateButton', () => {
 			render( <DuplicateButton { ...transformProps } /> );
 			const button = screen.getByRole( 'button' );
 			expect( button.getAttribute( 'data-icon' ) ).toBe( 'admin-post' );
+		} );
+
+		it( 'uses the namespaced target icon for new core icon values', () => {
+			const namespacedProps = {
+				...transformProps,
+				targetPostTypeObject: {
+					slug: 'post',
+					labels: { singular_name: 'Post' },
+					icon: 'core-admin/pin',
+				},
+			};
+			render( <DuplicateButton { ...namespacedProps } /> );
+			const button = screen.getByRole( 'button' );
+			expect( button.getAttribute( 'data-icon' ) ).toBe( 'pin' );
+			expect( button.getAttribute( 'data-icon-is-object' ) ).toBe(
+				'true'
+			);
+		} );
+
+		it( 'falls back to the default icon for an unresolvable icon value', () => {
+			const unknownProps = {
+				...transformProps,
+				targetPostTypeObject: {
+					slug: 'post',
+					labels: { singular_name: 'Post' },
+					icon: 'https://example.com/icon.svg',
+				},
+			};
+			render( <DuplicateButton { ...unknownProps } /> );
+			const button = screen.getByRole( 'button' );
+			expect( button.getAttribute( 'data-icon' ) ).toBe( 'page' );
 		} );
 
 		it( 'calls handleDuplicate with postId and target type on click', () => {
@@ -145,9 +179,9 @@ describe( 'DuplicateButton', () => {
 		it( 'sets isBusy when loading', () => {
 			mockIsLoading = true;
 			render( <DuplicateButton { ...defaultProps } /> );
-			expect( screen.getByRole( 'button' ).getAttribute( 'data-is-busy' ) ).toBe(
-				'true'
-			);
+			expect(
+				screen.getByRole( 'button' ).getAttribute( 'data-is-busy' )
+			).toBe( 'true' );
 		} );
 
 		it( 'is not disabled when not loading', () => {

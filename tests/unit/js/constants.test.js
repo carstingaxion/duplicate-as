@@ -1,10 +1,11 @@
 /**
  * Unit tests for src/constants.js
  *
- * @package DuplicateAs\Tests\Unit\JS
+ * @package
  * @since   0.3.0
  */
 
+import { page } from '@wordpress/icons';
 import { REST_PATH, DEFAULT_ICON } from '../../../src/constants';
 
 describe( 'Constants', () => {
@@ -32,17 +33,20 @@ describe( 'Constants', () => {
 	} );
 
 	describe( 'DEFAULT_ICON', () => {
-		it( 'should be a non-empty string', () => {
-			expect( typeof DEFAULT_ICON ).toBe( 'string' );
-			expect( DEFAULT_ICON.length ).toBeGreaterThan( 0 );
+		it( 'should be an @wordpress/icons component, not a Dashicon name', () => {
+			expect( typeof DEFAULT_ICON ).not.toBe( 'string' );
+			expect( DEFAULT_ICON ).not.toBeNull();
+			expect( typeof DEFAULT_ICON ).toBe( 'object' );
 		} );
 
-		it( 'should be a valid dashicon name without prefix', () => {
-			expect( DEFAULT_ICON ).not.toContain( 'dashicons-' );
+		it( 'should be the page icon from @wordpress/icons', () => {
+			expect( DEFAULT_ICON ).toEqual(
+				expect.objectContaining( { name: 'page' } )
+			);
 		} );
 
-		it( 'should match expected value', () => {
-			expect( DEFAULT_ICON ).toBe( 'admin-page' );
+		it( 'should match the page icon export', () => {
+			expect( DEFAULT_ICON ).toBe( page );
 		} );
 	} );
 } );

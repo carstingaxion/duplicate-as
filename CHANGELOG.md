@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 
 - Duplicated GatherPress events now appear in GatherPress' own event queries immediately, instead of only after the duplicate is opened and saved again.
+- The duplicate button keeps showing a matching icon now that WordPress core moves post type icons from Dashicons to new namespaced SVG icon names like `core-admin/pin` ([#117](https://github.com/carstingaxion/duplicate-as/issues/117)).
 
 ## [0.5.0](https://github.com/carstingaxion/duplicate-as/compare/0.4.1...0.5.0) - 2026-09-04
 
